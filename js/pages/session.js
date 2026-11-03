@@ -1,10 +1,3 @@
-// js/pages/session.js —— 选座页 第 11 章
-//
-// 参考标记：S06a（已选座）、S06b（座位被抢）、S06c（达到上限）、S06d（已停售）、S06e（游客）
-//
-// 【笨办法】每次选座/取消成功后，把座位图和右侧汇总整块重新拉一遍
-// 好处：不用在本地猜加了还是减了，界面永远等于服务端的真实状态
-
 import { request, isLoggedIn } from '../api.js';
 import { getConfig } from '../config.js';
 import {
@@ -15,7 +8,6 @@ import {
 import { initHeader } from '../auth.js';
 import { showAlert, clearAlerts, showApiError, showToast } from '../ui.js';
 
-// 页面级变量：一次只处理一个场次
 let session = null;
 let config = null;
 let timerId = null;
@@ -48,15 +40,10 @@ async function main() {
 }
 
 
-// ---------------------------------------------------------------------------
-// 页面标题
-// ---------------------------------------------------------------------------
-
 function fillTitle() {
   document.querySelector('#back-link').href = 'movie.html?id=' + session.movie.id;
   document.querySelector('#session-title').textContent = session.movie.title;
 
-  // 11.1.2：日期 + 时间段
   document.querySelector('#session-date').textContent =
     formatWeekdayShortDate(session.startsAt) + ' · ' + formatTimeRange(session.startsAt, session.endsAt);
 
@@ -70,10 +57,7 @@ function fillTitle() {
 }
 
 
-// ---------------------------------------------------------------------------
-// 拉座位图 + 购物车，然后整块重画
-// ---------------------------------------------------------------------------
-
+// load seats and cart, then redraw everything
 async function refreshSeatMap() {
   let seatMap;
 
@@ -84,7 +68,6 @@ async function refreshSeatMap() {
     return;
   }
 
-  // 购物车只有登录用户才需要（拿倒计时用）
   let cart = null;
   if (isLoggedIn()) {
     try {
@@ -108,20 +91,15 @@ function fillLegend() {
 }
 
 
-// ---------------------------------------------------------------------------
-// 画座位图
-// ---------------------------------------------------------------------------
-
+// build the seat map row by row
 function drawSeatMap(seatMap) {
   const seatmap = document.querySelector('#seatmap');
   const rowsBox = document.querySelector('#seatmap-rows');
   const closed = session.isBookingOpen === false;
 
-  // 列数用行内自定义属性
   seatmap.setAttribute('style', '--seat-cols: ' + seatMap.seatsPerRow);
   rowsBox.textContent = '';
 
-  // 先把平铺的座位按行分到二维数组里
   const rows = [];
   let r;
   for (r = 0; r < seatMap.rowsCount; r++) {
@@ -133,7 +111,6 @@ function drawSeatMap(seatMap) {
     rows[seat.row - 1].push(seat);
   }
 
-  // 一行一行画
   for (r = 0; r < rows.length; r++) {
     const rowElement = document.createElement('div');
     rowElement.className = 'c-seatmap__row';
@@ -159,7 +136,6 @@ function drawSeatMap(seatMap) {
 }
 
 
-// 一个座位按钮
 function createSeatButton(seat, closed) {
   const button = document.createElement('button');
   button.type = 'button';
@@ -169,14 +145,12 @@ function createSeatButton(seat, closed) {
     button.className = 'c-seat c-seat--vip';
   }
 
-  // 已占用：禁用，不给点击
   if (seat.status === 'Occupied') {
     button.disabled = true;
     button.setAttribute('aria-label', formatSeat(seat.row, seat.number) + ', occupied');
     return button;
   }
 
-  // 在购物车里 → aria-pressed=true
   if (seat.status === 'InMyCart') {
     button.setAttribute('aria-pressed', 'true');
   } else {
@@ -188,7 +162,6 @@ function createSeatButton(seat, closed) {
     formatSeat(seat.row, seat.number) + ', ' + formatSeatType(seat.type) + ', ' + formatMoney(seat.price)
   );
 
-  // 本场次已停止售票 → 所有座位都不可点
   if (closed === true) {
     button.disabled = true;
     return button;
@@ -202,10 +175,10 @@ function createSeatButton(seat, closed) {
 }
 
 
-// 点座位：空座 → 加；自己的座 → 删
+// add a seat or remove it, then reload
 async function handleSeatClick(seat) {
   if (isLoggedIn() === false) {
-    return; // 游客不给点（页面上已经有提示）
+    return;
   }
 
   try {
@@ -220,14 +193,12 @@ async function handleSeatClick(seat) {
 
     await refreshSeatMap();
   } catch (error) {
-    // 座位被别人抢走 / 已经在车里：提示 + 重画
     if (error.code === 'SEAT_OCCUPIED' || error.code === 'ALREADY_IN_CART') {
       showToast(error.detail, 'danger');
       await refreshSeatMap();
       return;
     }
 
-    // 达到单场上限
     if (error.code === 'CART_LIMIT_EXCEEDED') {
       showAlert(
         document.querySelector('#seats-alert'),
@@ -237,7 +208,6 @@ async function handleSeatClick(seat) {
       return;
     }
 
-    // 本场次停止售票
     if (error.code === 'BOOKING_CLOSED') {
       session.isBookingOpen = false;
       showToast(error.detail, 'danger');
@@ -250,15 +220,11 @@ async function handleSeatClick(seat) {
 }
 
 
-// ---------------------------------------------------------------------------
-// 右侧汇总
-// ---------------------------------------------------------------------------
-
+// summary of the seats of this session
 function drawSummary(seatMap) {
   const list = document.querySelector('#summary-list');
   list.textContent = '';
 
-  // 只统计本场次里我的座位
   const mine = [];
   let i;
   for (i = 0; i < seatMap.seats.length; i++) {
@@ -303,14 +269,9 @@ function createSummaryRow(seat) {
 }
 
 
-// ---------------------------------------------------------------------------
-// 页面提示：已停售 / 游客 / 达到上限
-// ---------------------------------------------------------------------------
-
 function showPageAlerts(seatMap) {
   const alertBox = document.querySelector('#seats-alert');
 
-  // 1. 本场次已停止售票
   if (session.isBookingOpen === false) {
     showAlert(
       alertBox,
@@ -323,7 +284,6 @@ function showPageAlerts(seatMap) {
     return;
   }
 
-  // 2. 游客
   if (isLoggedIn() === false) {
     showAlert(
       alertBox,
@@ -335,7 +295,6 @@ function showPageAlerts(seatMap) {
     return;
   }
 
-  // 3. 已经选到上限
   let count = 0;
   let i;
   for (i = 0; i < seatMap.seats.length; i++) {
@@ -357,21 +316,16 @@ function showPageAlerts(seatMap) {
 }
 
 
-// ---------------------------------------------------------------------------
-// 倒计时（规格书 11.3.2）
-// ---------------------------------------------------------------------------
-
+// countdown of the seat hold
 function updateTimer(cart) {
   const timerBox = document.querySelector('#timer');
   const timerText = document.querySelector('#timer-text');
 
-  // 先清掉上一次的定时器，避免越叠越多
   if (timerId !== null) {
     clearInterval(timerId);
     timerId = null;
   }
 
-  // 购物车里没有任何保留 → 不显示倒计时
   if (cart === null || cart.holdExpiresAt === null) {
     timerBox.hidden = true;
     return;
@@ -387,7 +341,7 @@ function updateTimer(cart) {
     if (drawTimer() === true) {
       clearInterval(timerId);
       timerId = null;
-      refreshSeatMap(); // 归零：重新拉购物车和座位图
+      refreshSeatMap();
     }
   }, 1000);
 
@@ -397,7 +351,6 @@ function updateTimer(cart) {
 
     timerText.textContent = 'Held until ' + holdTimeText + ' · ' + formatCountdown(leftSeconds) + ' left';
 
-    // 剩不到 2 分钟 → 加 is-warning
     if (leftMilliseconds < 120000) {
       timerBox.classList.add('is-warning');
     } else {

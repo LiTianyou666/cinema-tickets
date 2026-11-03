@@ -1,23 +1,12 @@
-// js/format.js —— 显示格式化
-//
-// 用法：
-//   页面启动时：const config = await getConfig(); setTimeZone(config.timeZone);
-//   之后就可以直接调用 formatMoney(1550) 这样的函数
-//
-// 两个要点：
-//   1. 所有日期时间都按【影院时区】显示，与电脑时区无关 → Intl 必须传 timeZone
-//   2. 不让 Intl 直接输出整串（不同地区格式会变），而是用 formatToParts() 取零件自己拼
-
-// 影院时区。页面启动时用 config.timeZone 覆盖
-// 默认给 UTC（中性值）：万一忘了设置，时间会明显不对，一眼能看出来
+// cinema time zone, set from config when the page starts
 let timeZone = 'UTC';
 
 export function setTimeZone(value) {
   timeZone = value;
 }
 
-// 把 ISO 时间按影院时区拆成零件：
 // { weekday: 'Mon', day: '5', month: 'Oct', year: '2026', hour: '19', minute: '30' }
+// split a date into parts in the cinema time zone
 function getParts(isoString) {
   const formatter = new Intl.DateTimeFormat('en-GB', {
     timeZone: timeZone,
@@ -27,7 +16,7 @@ function getParts(isoString) {
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
-    hourCycle: 'h23' // 24 小时制，0 点显示 00 而不是 24
+    hourCycle: 'h23'
   });
 
   const parts = {};
@@ -38,10 +27,7 @@ function getParts(isoString) {
 }
 
 
-// ---------------------------------------------------------------------------
-// 金额
-// ---------------------------------------------------------------------------
-
+// money
 const moneyFormatter = new Intl.NumberFormat('en-US'); // 1550 -> '1,550'
 
 export function formatMoney(amount) {
@@ -49,15 +35,12 @@ export function formatMoney(amount) {
 }
 
 export function formatDiscount(amount) {
-  return '−' + formatMoney(amount); // 注意：这里是减号 −（U+2212），不是连字符 -
+  return '−' + formatMoney(amount);
 }
 
 
-// ---------------------------------------------------------------------------
-// 日期与时间
-// ---------------------------------------------------------------------------
-
 // 'Mon, 5 Oct · 19:30'
+// dates and times
 export function formatSessionDateTime(isoString) {
   const p = getParts(isoString);
   return p.weekday + ', ' + p.day + ' ' + p.month + ' · ' + p.hour + ':' + p.minute;
@@ -88,7 +71,6 @@ export function formatTime(isoString) {
   return p.hour + ':' + p.minute;
 }
 
-// 倒计时：751 秒 -> '12:31'
 export function formatCountdown(totalSeconds) {
   const seconds = Math.max(0, totalSeconds);
   const minutes = Math.floor(seconds / 60);
@@ -96,10 +78,6 @@ export function formatCountdown(totalSeconds) {
   return String(minutes).padStart(2, '0') + ':' + String(rest).padStart(2, '0');
 }
 
-
-// ---------------------------------------------------------------------------
-// 时长、评分、座位、票数
-// ---------------------------------------------------------------------------
 
 // 127 -> '2 h 7 min'
 export function formatDuration(minutes) {
@@ -115,7 +93,6 @@ export function formatDuration(minutes) {
   return hours + ' h ' + rest + ' min';
 }
 
-// 8.23 -> '8.23'（无评分时 API 给 null，交给页面显示 'No ratings yet'）
 export function formatRating(value) {
   if (value === null || value === undefined) {
     return '';
@@ -128,7 +105,6 @@ export function formatSeat(row, number) {
   return 'Row ' + row + ', Seat ' + number;
 }
 
-// 今天的日期，YYYY-MM-DD（电脑本地时间，用于校验生日不能晚于今天）
 export function getTodayDateString() {
   const now = new Date();
   const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -144,13 +120,11 @@ export function formatTickets(count) {
   return count + ' tickets';
 }
 
-// '2026-10-06' -> 'Tue, 6 Oct'（日期标签、下拉选项用）
 export function formatWeekdayShortDate(isoString) {
   const p = getParts(isoString);
   return p.weekday + ', ' + p.day + ' ' + p.month;
 }
 
-// '2026-10-26' -> '26 Oct'（Coming soon · 徽章用，和 mockup 一致，不带年）
 export function formatShortDate(isoString) {
   const p = getParts(isoString);
   return p.day + ' ' + p.month;
@@ -172,11 +146,6 @@ export function formatMovies(count) {
   return count + ' movies';
 }
 
-
-// ---------------------------------------------------------------------------
-// 枚举的显示值 附录 A.4
-// 写法：查表，查不到就原样返回（服务端以后新增枚举值也不会显示成空白）
-// ---------------------------------------------------------------------------
 
 const AGE_RATING_TEXT = { Age0: '0+', Age6: '6+', Age12: '12+', Age16: '16+', Age18: '18+' };
 
@@ -208,7 +177,6 @@ export function formatBookingStatus(value) {
   return BOOKING_STATUS_TEXT[value] || value;
 }
 
-// 订单状态对应的 kit 类名，给 c-status 用：c-status c-status--active
 const BOOKING_STATUS_CLASS = {
   Active: 'c-status--active',
   Completed: 'c-status--completed',

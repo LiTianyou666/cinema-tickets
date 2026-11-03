@@ -3,12 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- 本机连不上 fonts.googleapis.com，而 kit/base.css 第一行 @import 了 Google 字体。
-     那个请求会一直挂着 → 样式表永远"加载中" → 浏览器会连脚本执行一起挡住。
-     这条 CSP 直接禁止外部样式，让那个 @import 立刻失败 -->
 <meta http-equiv="Content-Security-Policy" content="style-src 'self' 'unsafe-inline'; font-src 'self' data:">
 <title>Checkout · Cinema.Tickets</title>
-<!-- UI kit：四个 CSS 顺序不能改，文件一个字都不要动 -->
 <link rel="stylesheet" href="kit/tokens.css">
 <link rel="stylesheet" href="kit/base.css">
 <link rel="stylesheet" href="kit/layout.css">
@@ -17,7 +13,6 @@
 <body>
   <div class="l-page">
 
-    <!-- ===== 页头 5.1：游客版，登录后由 js/auth.js 替换用户区 ===== -->
     <header class="l-header">
       <div class="l-container c-header">
         <a class="c-header__logo" href="index.html"><svg class="c-icon c-icon--lg" aria-hidden="true"><use href="kit/icons.svg#icon-logo"></use></svg><span>Cinema.Tickets</span></a>
@@ -45,10 +40,8 @@
         <form class="l-split" id="checkout-form" aria-label="Checkout">
           <div class="l-split__main">
 
-            <!-- 出错 / 场次已关闭 时 JS 往这里放 alert -->
             <div id="checkout-alert" hidden></div>
 
-            <!-- 联系方式 -->
             <section class="l-section" aria-labelledby="contact-title">
               <div class="l-section__header"><h2 class="l-section__title" id="contact-title">Contact details</h2></div>
               <div class="c-card">
@@ -63,7 +56,6 @@
               </div>
             </section>
 
-            <!-- 支付方式 -->
             <section class="l-section" aria-labelledby="payment-title">
               <div class="l-section__header"><h2 class="l-section__title" id="payment-title">Payment method</h2></div>
               <fieldset class="l-grid l-grid--cols-2">
@@ -79,7 +71,6 @@
               </fieldset>
             </section>
 
-            <!-- 优惠码 -->
             <section class="l-section" aria-labelledby="promo-title">
               <div class="l-section__header"><h2 class="l-section__title" id="promo-title">Promo code</h2></div>
               <div class="c-promo" id="promo">
@@ -92,7 +83,6 @@
               </div>
             </section>
 
-            <!-- 票（购物车分组，不带删除按钮） -->
             <section class="l-section" aria-labelledby="tickets-title">
               <div class="l-section__header"><h2 class="l-section__title" id="tickets-title">Tickets</h2></div>
               <div class="l-stack" id="ticket-groups"></div>

@@ -1,17 +1,11 @@
-// js/config.js —— 服务端参数
-//
-// 接口：GET /api/config（不需要登录）
-// 目的：整站只请求一次，之后都从内存里拿
-// 用法：const config = await getConfig();  然后 config.maxSeatsPerSession ...
-
 import { request } from './api.js';
 
-// 存配置的地方。null 表示还没拿过
+// server settings, requested once and kept in memory
 let cachedConfig = null;
 
 export async function getConfig() {
   if (cachedConfig !== null) {
-    return cachedConfig; // 拿过了，直接给，不再发请求
+    return cachedConfig;
   }
 
   cachedConfig = await request('/config', { auth: false });

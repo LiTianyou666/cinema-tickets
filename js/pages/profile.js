@@ -1,9 +1,3 @@
-// js/pages/profile.js —— 个人资料页 第 8 章
-//
-// 参考标记：参考资料/snippets/S03a.html（默认）、S03b.html（已保存 + 校验错误）
-//
-// 流程：访问控制 → 页头 → GET 资料回填 → 编辑三个字段 → PUT 保存 → toast
-
 import { request } from '../api.js';
 import { requireAuth, initHeader } from '../auth.js';
 import { getTodayDateString } from '../format.js';
@@ -13,11 +7,11 @@ import {
   clearAlerts, showApiError, showToast, setBusy
 } from '../ui.js';
 
-// 受限页面：没登录就跳登录页并带上 returnUrl（规格书 5.2.1）
 if (requireAuth()) {
   start();
 }
 
+// page start
 async function start() {
   const form = document.querySelector('#profile-form');
   const emailValue = document.querySelector('#profile-email');
@@ -36,13 +30,12 @@ async function start() {
 
   applyPhoneMask(phoneInput);
 
-  // 页头：换成邮箱 + Log out，并顺手拿到 profile，省掉一次重复请求
   setBusy(document.querySelector('.l-main'), true);
   const profile = await initHeader();
   setBusy(document.querySelector('.l-main'), false);
 
   if (profile === null) {
-    return; // 拿不到资料（通常是没登录），api.js/auth.js 已经处理跳转了
+    return;
   }
 
   fillProfile(profile);
@@ -58,7 +51,6 @@ async function start() {
   });
 
 
-  // 把服务端返回的资料填进页面
   function fillProfile(data) {
     emailValue.textContent = data.email;
     genderValue.textContent = data.gender;
@@ -69,20 +61,17 @@ async function start() {
 
 
   async function saveProfile() {
-    // 1. 清掉上次的错误
     for (const fieldName in fieldMap) {
       clearFieldError(fieldMap[fieldName].input, fieldMap[fieldName].error);
     }
     clearAlerts(alertBox);
 
-    // 2. 只提交可编辑的三个字段（Email / Gender 只读）
     const values = {
       fullName: nameInput.value.trim(),
       birthDate: birthInput.value,
       phoneNumber: phoneInput.value
     };
 
-    // 3. 浏览器先校验
     const errors = validate(values);
 
     if (Object.keys(errors).length > 0) {
@@ -90,7 +79,6 @@ async function start() {
       return;
     }
 
-    // 4. 提交
     setLoading(submitButton, true);
 
     try {
@@ -113,7 +101,7 @@ async function start() {
 }
 
 
-// 浏览器端校验（规则与文案来自5.4）
+// browser validation before saving
 function validate(values) {
   const errors = {};
   const today = getTodayDateString();

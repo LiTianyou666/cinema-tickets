@@ -1,13 +1,3 @@
-// js/pages/movie.js —— 影片详情页 10.1 / 10.2 / 10.3
-//
-// 参考标记：S05a（今天有场次）、S05b（自己的影评）、S05g（未上映）、S05f（游客）
-//
-// 地址：movie.html?id={movieId}&date={date}
-// 分工：
-//   10.1 详情块   ← GET /api/movies/{id}
-//   10.2 场次     ← 日期标签 + GET /api/movies/{id}/sessions?date=
-//   10.3 影评     ← GET /api/movies/{id}/reviews?page=
-
 import { request, isLoggedIn } from '../api.js';
 import { getConfig } from '../config.js';
 import {
@@ -22,7 +12,6 @@ import {
   setLoading, setFieldError, clearFieldError, showToast
 } from '../ui.js';
 
-// 场次分组顺序
 const FORMAT_ORDER = ['Imax', 'ThreeD', 'TwoD'];
 
 main();
@@ -60,10 +49,6 @@ async function main() {
 }
 
 
-// ---------------------------------------------------------------------------
-// 10.1 详情块
-// ---------------------------------------------------------------------------
-
 function renderDetails(movie) {
   document.querySelector('#movie-poster').src = movie.posterUrl;
   document.querySelector('#movie-title').textContent = movie.title;
@@ -74,7 +59,6 @@ function renderDetails(movie) {
   document.querySelector('#movie-duration').textContent = formatDuration(movie.durationMinutes);
   document.querySelector('#movie-release').textContent = formatDate(movie.releaseDate);
 
-  // 年龄分级 + 类型徽章
   const badges = document.querySelector('#movie-badges');
   badges.textContent = '';
 
@@ -90,7 +74,6 @@ function renderDetails(movie) {
     badges.appendChild(badge);
   }
 
-  // 评分（c-stars--lg）
   const stars = document.querySelector('#movie-stars');
 
   if (movie.rating === null) {
@@ -106,16 +89,11 @@ function renderDetails(movie) {
 }
 
 
-// ---------------------------------------------------------------------------
-// 10.2 场次
-// ---------------------------------------------------------------------------
-
 async function renderScheduleArea(movie, config, params) {
   const tabs = document.querySelector('#date-tabs');
   const scheduleArea = document.querySelector('#schedule-area');
   const scheduleAlert = document.querySelector('#schedule-alert');
 
-  // 未上映：用 alert 替代整个场次区 10.2.4
   if (movie.releaseDate > getTodayDateString()) {
     tabs.textContent = '';
     scheduleArea.textContent = '';
@@ -123,7 +101,6 @@ async function renderScheduleArea(movie, config, params) {
     return;
   }
 
-  // 选中日期：地址里的 date，没有就用第一个有场次的日期
   const sessionDates = movie.sessionDates || [];
   let selectedDate = params.get('date');
 
@@ -133,7 +110,6 @@ async function renderScheduleArea(movie, config, params) {
 
   renderDateTabs(tabs, selectedDate, sessionDates, config.scheduleDaysAhead, movie.id);
 
-  // 请求这一天的场次
   setBusy(scheduleArea, true);
 
   let sessions = [];
@@ -149,7 +125,7 @@ async function renderScheduleArea(movie, config, params) {
 }
 
 
-// 日期标签：scheduleDaysAhead 天，第一个是 Today
+// date tabs, dates without sessions have no link
 function renderDateTabs(tabs, selectedDate, sessionDates, daysAhead, movieId) {
   tabs.textContent = '';
 
@@ -180,7 +156,6 @@ function renderDateTabs(tabs, selectedDate, sessionDates, daysAhead, movieId) {
       tab.setAttribute('aria-current', 'date');
     }
 
-    // 这一天没有场次 → 不给链接，只标 aria-disabled 10.2.1
     if (sessionDates.indexOf(iso) === -1) {
       tab.setAttribute('aria-disabled', 'true');
     } else {
@@ -192,7 +167,7 @@ function renderDateTabs(tabs, selectedDate, sessionDates, daysAhead, movieId) {
 }
 
 
-// 场次：按 IMAX → 3D → 2D 分组，每组一个 c-session-group
+// sessions grouped by format, imax first
 function renderSessions(container, sessions, daysAhead) {
   container.textContent = '';
 
@@ -219,7 +194,6 @@ function renderSessions(container, sessions, daysAhead) {
     const group = document.createElement('section');
     group.className = 'c-session-group';
 
-    // 组头：格式 + 影厅名（去重后用逗号连接）
     const halls = [];
     for (const session of list) {
       if (halls.indexOf(session.hall.name) === -1) {
@@ -248,7 +222,6 @@ function renderSessions(container, sessions, daysAhead) {
 }
 
 
-// 一个场次牌：时间 + 影厅 + 起价；已停止售票则无链接
 function createSessionTile(session) {
   const tile = document.createElement('a');
   tile.className = 'c-session';
@@ -272,10 +245,6 @@ function createSessionTile(session) {
   return tile;
 }
 
-
-// ---------------------------------------------------------------------------
-// 10.3 影评：列表 + 追加
-// ---------------------------------------------------------------------------
 
 async function loadFirstPageOfReviews(movie) {
   document.querySelector('#reviews-count').textContent = movie.reviewsCount;
@@ -301,14 +270,13 @@ async function loadReviews(movie, page, append) {
 
   for (const review of data.reviews) {
     if (review.isMine) {
-      continue; // 自己的影评在上方单独显示，不在列表里重复（规格书 10.3.2）
+      continue;
     }
     list.appendChild(createReview(review));
   }
 
   moreArea.textContent = '';
 
-  // 还有下一页 → 放Show more reviews
   if (data.pagination.currentPage < data.pagination.pageCount) {
     const button = document.createElement('button');
     button.className = 'c-btn c-btn--secondary';
@@ -344,15 +312,11 @@ function createReview(review) {
 }
 
 
-// ---------------------------------------------------------------------------
-// 10.3 自己的影评区：游客提示 / 不能评 / 表单 / 已评（可编辑、可删除）
-// ---------------------------------------------------------------------------
-
+// three states: guest, not attended, allowed or already reviewed
 async function renderOwnReviewArea(movie) {
   const area = document.querySelector('#own-review-area');
   area.textContent = '';
 
-  // 游客：提示登录 10.3.4
   if (isLoggedIn() === false) {
     showAlert(area, 'Log in to leave a review.', 'info', 'Log in',
       'login.html?returnUrl=' + encodeURIComponent('movie.html?id=' + movie.id));
@@ -381,7 +345,7 @@ async function renderOwnReviewArea(movie) {
 }
 
 
-// 影评表单（新建或编辑）
+// one form used for both create and edit
 function createReviewForm(movie, existingReview) {
   const isEdit = existingReview !== null;
 
@@ -408,7 +372,6 @@ function createReviewForm(movie, existingReview) {
       '<button class="c-btn c-btn--primary" type="submit" id="review-submit">Publish review</button>' +
     '</div>';
 
-  // 1..10 十颗星，每颗是一个 radio
   const starsBox = form.querySelector('.c-stars-input__stars');
   for (let value = 1; value <= 10; value++) {
     const label = document.createElement('label');
@@ -424,19 +387,16 @@ function createReviewForm(movie, existingReview) {
   const counter = form.querySelector('.c-review-form__counter');
   const submitButton = form.querySelector('#review-submit');
 
-  // 选星 → 更新 8 / 10
   form.addEventListener('change', function (event) {
     if (event.target.className === 'c-stars-input__radio') {
       ratingOutput.textContent = event.target.value + ' / 10';
     }
   });
 
-  // 输入文字 → 更新计数器
   textarea.addEventListener('input', function () {
     counter.textContent = textarea.value.length + ' / 1000';
   });
 
-  // 编辑模式：预填 + 加一个 Cancel 按钮
   if (isEdit) {
     submitButton.textContent = 'Save';
 
@@ -468,7 +428,7 @@ function createReviewForm(movie, existingReview) {
 }
 
 
-// 提交：新建用 POST，编辑用 PUT
+// post a new review or put an existing one
 async function submitReview(movie, form, existingReview) {
   const textarea = form.querySelector('#review-text');
   const textError = form.querySelector('#review-text-error');
@@ -480,7 +440,6 @@ async function submitReview(movie, form, existingReview) {
 
   clearFieldError(textarea, textError);
 
-  // 浏览器先校验（规则和文案来自5.4）
   if (text.length < 10 || text.length > 1000) {
     setFieldError(textarea, textError, 'The review text must be 10 to 1000 characters long.');
     return;
@@ -520,7 +479,6 @@ async function submitReview(movie, form, existingReview) {
 }
 
 
-// 自己的影评（AlreadyReviewed 状态），带 Edit / Delete
 function createMyReview(review, movie) {
   const article = document.createElement('article');
   article.className = 'c-review c-review--mine';
@@ -557,9 +515,9 @@ function createMyReview(review, movie) {
 }
 
 
-// 删除确认对话框 10.3.7
 let pendingDelete = null;
 
+// delete confirmation, listeners are added once
 function setupDeleteDialog() {
   const dialog = document.querySelector('#delete-review-dialog');
   if (dialog === null) {
@@ -582,7 +540,7 @@ function setupDeleteDialog() {
     try {
       await request('/reviews/' + encodeURIComponent(target.review.id), { method: 'DELETE' });
       const fresh = await refreshMovie(target.movie);
-      await renderOwnReviewArea(fresh); // 删除后回到表单（规格书 10.3.7）
+      await renderOwnReviewArea(fresh);
     } catch (error) {
       showToast(error.detail, 'danger');
     }
@@ -599,7 +557,6 @@ function openDeleteDialog(review, movie) {
 }
 
 
-// 影评变动后：重新拉影片（评分和数量会变）+ 重新渲染详情和列表
 async function refreshMovie(movie) {
   const fresh = await request('/movies/' + encodeURIComponent(movie.id));
 
@@ -610,10 +567,6 @@ async function refreshMovie(movie) {
   return fresh;
 }
 
-
-// ---------------------------------------------------------------------------
-// 小工具
-// ---------------------------------------------------------------------------
 
 function createNotFound() {
   const box = document.createElement('div');

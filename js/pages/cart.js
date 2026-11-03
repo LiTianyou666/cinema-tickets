@@ -1,9 +1,3 @@
-// js/pages/cart.js —— 购物车页 第 12 章
-//
-// 参考标记：S07a（两个场次）、S07b（部分保留过期）、S07c（空车）
-//
-// 【笨办法】和选座页一样：删一个座位、清空购物车之后，重新 GET /cart 整块重画
-
 import { request } from '../api.js';
 import { getConfig } from '../config.js';
 import {
@@ -18,7 +12,6 @@ let cart = null;
 let timerId = null;
 let lastTicketsCount = 0;
 
-// 受限页面：没登录直接跳登录页 5.2.1
 if (requireAuth()) {
   start();
 }
@@ -36,10 +29,7 @@ async function start() {
 }
 
 
-// ---------------------------------------------------------------------------
-// 拉购物车并整块重画
-// ---------------------------------------------------------------------------
-
+// load the cart and redraw
 async function refreshCart() {
   try {
     cart = await request('/cart');
@@ -68,10 +58,6 @@ function drawSummary() {
 }
 
 
-// ---------------------------------------------------------------------------
-// 画分组：先按 session.id 归组，再按开场时间排序
-// ---------------------------------------------------------------------------
-
 function drawGroups() {
   const groupsBox = document.querySelector('#cart-groups');
   const emptyBox = document.querySelector('#cart-empty');
@@ -79,7 +65,6 @@ function drawGroups() {
   groupsBox.textContent = '';
   emptyBox.textContent = '';
 
-  // 空车 12.6
   if (cart.items.length === 0) {
     emptyBox.appendChild(createEmptyState());
     return;
@@ -92,9 +77,6 @@ function drawGroups() {
     groupsBox.appendChild(createGroup(groups[i]));
   }
 }
-
-
-// 分组逻辑在 js/cart-groups.js 里（结算页也要用同一套，避免两页重复写）
 
 
 function createGroup(group) {
@@ -177,10 +159,7 @@ function createEmptyState() {
 }
 
 
-// ---------------------------------------------------------------------------
-// 删除一个座位 / 清空购物车
-// ---------------------------------------------------------------------------
-
+// remove one seat
 async function removeItem(item) {
   try {
     await request('/cart/items/' + item.id, { method: 'DELETE' });
@@ -205,17 +184,13 @@ async function clearCart() {
 }
 
 
-// 购物车变了：重画页面 + 更新页头计数器
 async function updateCartAfterChange() {
   await refreshCart();
   await updateCartCounter();
 }
 
 
-// ---------------------------------------------------------------------------
-// 倒计时（规格书 12.3）
-// ---------------------------------------------------------------------------
-
+// countdown of the hold
 function updateTimer() {
   const timerBox = document.querySelector('#timer');
   const timerText = document.querySelector('#timer-text');
@@ -265,7 +240,6 @@ function updateTimer() {
 }
 
 
-// 保留时间到期：重新拉购物车，比较前后票数，少了就提示被移走了多少 12.3
 async function handleHoldExpired() {
   const before = lastTicketsCount;
 

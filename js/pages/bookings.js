@@ -1,9 +1,3 @@
-// js/pages/bookings.js —— 订单列表页（规格书第 14 章）
-//
-// 参考标记：S09a（各种状态）、S09b（刚下完单）、S09c（取消确认）、S09d（没有订单）
-//
-// 【笨办法】取消成功后重新拉一遍订单列表，不改本地状态
-
 import { request } from '../api.js';
 import { getConfig } from '../config.js';
 import {
@@ -15,9 +9,8 @@ import { showAlert, clearAlerts, showApiError, showToast } from '../ui.js';
 
 let config = null;
 let cart = null;
-let pendingBooking = null; // 对话框里等待确认的那一条订单
+let pendingBooking = null;
 
-// 受限页面 5.2.1
 if (requireAuth()) {
   start();
 }
@@ -37,10 +30,6 @@ async function start() {
 }
 
 
-// ---------------------------------------------------------------------------
-// 数据
-// ---------------------------------------------------------------------------
-
 async function loadCart() {
   try {
     cart = await request('/cart');
@@ -50,6 +39,7 @@ async function loadCart() {
 }
 
 
+// load the list and redraw
 async function loadBookings() {
   const list = document.querySelector('#bookings-list');
   const emptyBox = document.querySelector('#bookings-empty');
@@ -66,7 +56,6 @@ async function loadBookings() {
   list.textContent = '';
   emptyBox.textContent = '';
 
-  // 一条都没有 14.6
   if (bookings.length === 0) {
     emptyBox.appendChild(createEmptyState());
     return;
@@ -78,10 +67,6 @@ async function loadBookings() {
   }
 }
 
-
-// ---------------------------------------------------------------------------
-// 一行订单
-// ---------------------------------------------------------------------------
 
 function createBookingRow(booking) {
   const item = document.createElement('article');
@@ -127,21 +112,18 @@ function createBookingRow(booking) {
 }
 
 
-// 操作区按状态和取消截止时间决定 14.2
+// the action depends on the status and on the cancellation cut-off
 function fillActions(actionsBox, booking) {
-  // 已完成 → 去写影评
   if (booking.status === 'Completed') {
     actionsBox.innerHTML =
       '<a class="c-btn c-btn--link" href="movie.html?id=' + booking.movie.id + '">Review the movie</a>';
     return;
   }
 
-  // 已取消 → 什么都不放
   if (booking.status === 'Cancelled') {
     return;
   }
 
-  // Active：看还来不来得及取消
   const startsAt = new Date(booking.session.startsAt).getTime();
   const cancelDeadline = startsAt - config.cancellationCutoffMinutes * 60 * 1000;
 
@@ -157,16 +139,11 @@ function fillActions(actionsBox, booking) {
     return;
   }
 
-  // 来不及了 → 显示截止时间
   const span = document.createElement('span');
   span.textContent = 'Cancellation closed at ' + formatTime(new Date(cancelDeadline).toISOString());
   actionsBox.appendChild(span);
 }
 
-
-// ---------------------------------------------------------------------------
-// 取消订单
-// ---------------------------------------------------------------------------
 
 function setupDialog() {
   const dialog = document.querySelector('#cancel-dialog');
@@ -197,6 +174,7 @@ function setupDialog() {
 }
 
 
+// confirm before cancelling
 function openCancelDialog(booking) {
   pendingBooking = booking;
 
@@ -206,11 +184,6 @@ function openCancelDialog(booking) {
 }
 
 
-// ---------------------------------------------------------------------------
-// 顶部两块提示
-// ---------------------------------------------------------------------------
-
-// ?created=N → N bookings are created. The cart is empty.（规格书 14.5）
 function showCreatedAlert() {
   const params = new URLSearchParams(location.search);
   const created = params.get('created');
@@ -231,7 +204,6 @@ function showCreatedAlert() {
 }
 
 
-// 购物车不为空 → 提示卡（规格书 14.4）
 function showCartHint() {
   const box = document.querySelector('#cart-hint');
 

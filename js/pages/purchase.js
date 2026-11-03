@@ -1,12 +1,3 @@
-// js/pages/purchase.js —— 结算页 第 13 章
-//
-// 参考标记：S08a（默认）、S08b（优惠码已应用）、S08c（优惠码被拒）、S08d（某场次已关闭）
-//
-// 三件事：
-//   1. 显示资料（只读）+ 支付方式 + 优惠码
-//   2. 检查每个场次是否还来得及订（开场前 bookingCutoffMinutes 停止售票）
-//   3. 点 Confirm booking → POST /api/bookings → 跳订单页
-
 import { request } from '../api.js';
 import { getConfig } from '../config.js';
 import {
@@ -19,10 +10,9 @@ import { showAlert, clearAlerts, showApiError, showToast, setLoading } from '../
 
 let config = null;
 let cart = null;
-let appliedPromo = null;      // 优惠码校验成功后的结果
-let closedSessionIds = [];    // 已经不能订的场次 id
+let appliedPromo = null;
+let closedSessionIds = [];
 
-// 受限页面：没登录直接跳登录页（规格书 5.2.1）
 if (requireAuth()) {
   start();
 }
@@ -42,7 +32,6 @@ async function start() {
     return;
   }
 
-  // 空车直接回购物车 13.1
   if (cart.items.length === 0) {
     location.href = 'cart.html';
     return;
@@ -61,10 +50,6 @@ async function start() {
 }
 
 
-// ---------------------------------------------------------------------------
-// 联系方式（只读）
-// ---------------------------------------------------------------------------
-
 function fillContact(profile) {
   document.querySelector('#contact-name').textContent = profile.fullName;
   document.querySelector('#contact-email').textContent = profile.email;
@@ -72,10 +57,7 @@ function fillContact(profile) {
 }
 
 
-// ---------------------------------------------------------------------------
-// 场次时间校验（规格书 13.6）
-// ---------------------------------------------------------------------------
-
+// a session must start later than now + bookingCutoffMinutes
 function checkSessions() {
   closedSessionIds = [];
 
@@ -87,7 +69,6 @@ function checkSessions() {
     const item = cart.items[i];
     const startsAt = new Date(item.session.startsAt).getTime();
 
-    // 必须满足：开场时间 > 现在 + 截止分钟数
     if (startsAt - cutoffMilliseconds <= now) {
       if (closedSessionIds.indexOf(item.session.id) === -1) {
         closedSessionIds.push(item.session.id);
@@ -97,16 +78,11 @@ function checkSessions() {
 }
 
 
-// 这个场次几点停止售票（开场时间往前提 cutoff 分钟）
 function getClosingTimeText(sessionStartsAt) {
   const closesAt = new Date(new Date(sessionStartsAt).getTime() - config.bookingCutoffMinutes * 60000);
   return formatTime(closesAt.toISOString());
 }
 
-
-// ---------------------------------------------------------------------------
-// 票（购物车分组，不带删除按钮）
-// ---------------------------------------------------------------------------
 
 function drawGroups() {
   const box = document.querySelector('#ticket-groups');
@@ -167,7 +143,6 @@ function createGroup(group) {
     seatsBox.appendChild(createSeatRow(group.items[i]));
   }
 
-  // 场次已经不能订 → 加一行错误说明
   if (closed === true) {
     const errorLine = document.createElement('p');
     errorLine.className = 'c-cart-group__error';
@@ -195,10 +170,6 @@ function createSeatRow(item) {
 }
 
 
-// ---------------------------------------------------------------------------
-// 右侧 Summary
-// ---------------------------------------------------------------------------
-
 function drawSummary() {
   document.querySelector('#summary-subtotal').textContent = formatMoney(cart.totalPrice);
 
@@ -210,7 +181,6 @@ function drawSummary() {
     return;
   }
 
-  // 有优惠码：显示折扣行，总额用服务端算好的
   discountLine.hidden = false;
   discountLine.querySelector('dt').textContent = 'Discount (' + appliedPromo.discountPercent + '%)';
   document.querySelector('#summary-discount').textContent = formatDiscount(appliedPromo.discountAmount);
@@ -218,10 +188,7 @@ function drawSummary() {
 }
 
 
-// ---------------------------------------------------------------------------
-// 优惠码
-// ---------------------------------------------------------------------------
-
+// promo code
 function setupPromo() {
   const input = document.querySelector('#promo-code');
   const applyButton = document.querySelector('#promo-apply');
@@ -254,7 +221,6 @@ function setupPromo() {
 }
 
 
-// 应用成功：输入框整块换成 CODE · 说明 + Remove
 function showPromoApplied(result) {
   const box = document.querySelector('#promo');
   box.className = 'c-promo is-success';
@@ -272,7 +238,6 @@ function showPromoApplied(result) {
 }
 
 
-// 移除优惠码：恢复输入框
 function resetPromo() {
   appliedPromo = null;
 
@@ -305,10 +270,6 @@ function showPromoFailure(message, input) {
 }
 
 
-// ---------------------------------------------------------------------------
-// 提交订单
-// ---------------------------------------------------------------------------
-
 function setupForm() {
   const form = document.querySelector('#checkout-form');
 
@@ -322,7 +283,6 @@ function setupForm() {
 }
 
 
-// 有场次关闭时：确认按钮不可用 + 顶部警告
 function drawConfirmState() {
   const button = document.querySelector('#confirm-button');
 
@@ -350,8 +310,8 @@ function showClosedAlert() {
 }
 
 
+// send the booking
 async function submitBooking() {
-  // 提交前再查一次时间 13.6
   checkSessions();
   drawGroups();
   drawConfirmState();
@@ -394,14 +354,12 @@ async function submitBooking() {
 async function handleSubmitError(error) {
   const alertBox = document.querySelector('#checkout-alert');
 
-  // 座位保留过期：提示 + 重新拉购物车
   if (error.code === 'HOLD_EXPIRED') {
     showAlert(alertBox, error.detail, 'danger');
     await reloadCart();
     return;
   }
 
-  // 某个场次关闭了：服务端会告诉我们哪些场次
   if (error.code === 'BOOKING_CLOSED') {
     if (error.affectedIds !== null) {
       let i;
@@ -417,14 +375,12 @@ async function handleSubmitError(error) {
     return;
   }
 
-  // 优惠码相关：显示在优惠码下面
   if (error.code === 'PROMO_NOT_FOUND' || error.code === 'PROMO_EXPIRED' ||
       error.code === 'PROMO_MIN_TICKETS') {
     showPromoFailure(error.detail, document.querySelector('#promo-code'));
     return;
   }
 
-  // 座位被别人买走
   if (error.code === 'SEAT_OCCUPIED') {
     showAlert(alertBox, error.detail, 'danger');
     return;

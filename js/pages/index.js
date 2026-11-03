@@ -1,11 +1,3 @@
-// js/pages/index.js —— 影片目录页 第 9 章
-//
-// 参考标记：S04a（默认）、S04b（筛选已应用）、S04c（加载中）、S04d（空结果）、S04e（游客第 3 页）
-//
-// 核心思路：页面状态全部存在地址栏
-//   加载时：读地址栏参数 → 回填筛选控件 → 用同样的参数请求 /api/movies
-//   分页：真正的 <a href> 链接，带着完整查询串，所以刷新、分享都能还原同一页
-
 import { request } from '../api.js';
 import { getConfig } from '../config.js';
 import {
@@ -22,7 +14,6 @@ async function main() {
   const config = await getConfig();
   setTimeZone(config.timeZone);
 
-  // 页头（邮箱 / Log out / 购物车计数器）。不 await：让它在后台自己跑完
   initHeader();
 
   const grid = document.querySelector('#movie-grid');
@@ -34,14 +25,13 @@ async function main() {
   const nowShowingSwitch = document.querySelector('#filter-now-showing');
   const alertBox = document.querySelector('#page-alert');
 
-  // 地址栏参数就是页面状态
+  // the url is the only source of page state
   const params = new URLSearchParams(location.search);
 
   fillDateOptions(config.scheduleDaysAhead);
   fillControls();
   updateMultiselectLabels();
 
-  // 勾选复选框时，同步更新Any / 2 个标签 / N selected这段文字
   document.addEventListener('change', function (event) {
     if (event.target.className === 'c-check__input') {
       updateMultiselectLabels();
@@ -50,10 +40,6 @@ async function main() {
 
   await loadMovies();
 
-
-  // -------------------------------------------------------------------------
-  // 1. 把地址栏参数回填到控件上
-  // -------------------------------------------------------------------------
 
   function fillControls() {
     const selectedGenres = params.getAll('genres');
@@ -72,7 +58,7 @@ async function main() {
   }
 
 
-  // 日期下拉：从今天起 scheduleDaysAhead 天，第一个是 Today
+  // date select, scheduleDaysAhead days starting today
   function fillDateOptions(daysAhead) {
     const today = new Date();
 
@@ -101,7 +87,6 @@ async function main() {
   }
 
 
-  // 关闭状态的多选显示：Any / 最多两个标签 / N selected 9.1.4
   function updateMultiselectLabels() {
     for (const details of document.querySelectorAll('.c-multiselect')) {
       const checked = details.querySelectorAll('.c-check__input:checked');
@@ -122,10 +107,7 @@ async function main() {
   }
 
 
-  // -------------------------------------------------------------------------
-  // 2. 请求数据（先显示骨架卡）
-  // -------------------------------------------------------------------------
-
+  // request the list and render it
   async function loadMovies() {
     clearAlerts(alertBox);
     showSkeletons();
@@ -163,6 +145,7 @@ async function main() {
   }
 
 
+  // skeleton cards while loading
   function showSkeletons() {
     setBusy(grid, true);
     grid.textContent = '';
@@ -181,10 +164,6 @@ async function main() {
     }
   }
 
-
-  // -------------------------------------------------------------------------
-  // 3. 渲染
-  // -------------------------------------------------------------------------
 
   function renderMovies(data) {
     countLabel.textContent = formatMovies(data.pagination.totalItems);
@@ -220,7 +199,6 @@ async function main() {
     const poster = card.querySelector('.c-poster__img');
     poster.src = movie.posterUrl;
 
-    // 上映日期晚于今天 → 加 Coming soon 徽章 9.2.2
     if (movie.releaseDate > getTodayDateString()) {
       const badge = document.createElement('span');
       badge.className = 'c-badge c-badge--info c-movie-card__badge';
@@ -239,7 +217,6 @@ async function main() {
     if (movie.rating === null) {
       stars.innerHTML = '<span class="c-stars__none">No ratings yet</span>';
     } else {
-      // --rating 是规格书允许的唯二行内自定义属性（另一个是 --seat-cols）
       stars.setAttribute('style', '--rating: ' + movie.rating);
       stars.querySelector('.c-stars__icons').setAttribute(
         'aria-label', 'Rating ' + formatRating(movie.rating) + ' out of 10'
@@ -273,15 +250,12 @@ async function main() {
   }
 
 
-  // -------------------------------------------------------------------------
-  // 4. 分页：真正的链接，带完整查询串 + page=N
-  // -------------------------------------------------------------------------
-
+  // pagination, real links with the full query string
   function renderPagination(pagination) {
     paginationArea.textContent = '';
 
     if (pagination.pageCount <= 1) {
-      return; // 只有一页就不显示分页（规格书 9.2.3）
+      return;
     }
 
     const nav = document.createElement('nav');
@@ -326,7 +300,7 @@ async function main() {
     }
 
     if (options.disabled) {
-      link.setAttribute('aria-disabled', 'true'); // 不可用时不加 href
+      link.setAttribute('aria-disabled', 'true');
     } else {
       link.href = buildPageUrl(options.page);
     }
@@ -339,16 +313,13 @@ async function main() {
   }
 
 
+  // copy all params and change only page
   function buildPageUrl(page) {
     const query = new URLSearchParams(params);
     query.set('page', page);
     return 'index.html?' + query.toString();
   }
 
-
-  // -------------------------------------------------------------------------
-  // 5. 错误处理
-  // -------------------------------------------------------------------------
 
   function handleLoadError(error) {
     if (error.code === 'INVALID_PAGE' || error.code === 'INVALID_DATE' || error.code === 'VALIDATION_ERROR') {

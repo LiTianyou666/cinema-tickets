@@ -1,9 +1,3 @@
-// js/pages/booking.js —— 订单详情页（规格书第 15 章）
-//
-// 参考标记：S10a（Active）、S10b（Cancelled）、S10c（Completed）、S10d（找不到）
-//
-// 整块内容都用 JS 生成（数据全是接口给的，页面里没什么静态内容）
-
 import { request } from '../api.js';
 import { getConfig } from '../config.js';
 import {
@@ -17,7 +11,6 @@ import { showAlert, showToast } from '../ui.js';
 let config = null;
 let booking = null;
 
-// 受限页面（规格书 5.2.1）
 if (requireAuth()) {
   start();
 }
@@ -40,7 +33,6 @@ async function start() {
   try {
     booking = await request('/bookings/' + bookingId);
   } catch (error) {
-    // 404 和 403 都按找不到处理 15.1
     showNotFound();
     return;
   }
@@ -53,10 +45,6 @@ async function start() {
 }
 
 
-// ---------------------------------------------------------------------------
-// 页面骨架
-// ---------------------------------------------------------------------------
-
 function drawPage() {
   const content = document.querySelector('#booking-content');
   content.textContent = '';
@@ -66,7 +54,6 @@ function drawPage() {
   content.appendChild(createDetailsCard());
   content.appendChild(createTicketsCard());
 
-  // 已完成的订单可能要显示可以写影评的提示，先留个位置
   const reviewBox = document.createElement('div');
   reviewBox.id = 'review-alert';
   reviewBox.hidden = true;
@@ -74,7 +61,6 @@ function drawPage() {
 }
 
 
-// 标题 + 状态 + 取消按钮
 function createTitleBlock() {
   const block = document.createElement('div');
   block.className = 'c-page-title';
@@ -93,7 +79,6 @@ function createTitleBlock() {
   statusSpan.className = 'c-status ' + getStatusClass(booking.status);
   statusSpan.textContent = formatBookingStatus(booking.status);
 
-  // 取消按钮只在这时显示：Active 且还没过取消截止时间（和列表页同一规则）
   const deadline = new Date(booking.session.startsAt).getTime() -
     config.cancellationCutoffMinutes * 60 * 1000;
 
@@ -110,7 +95,7 @@ function createTitleBlock() {
 }
 
 
-// 场次卡
+// session card
 function createSessionCard() {
   const card = document.createElement('section');
   card.className = 'c-card';
@@ -148,7 +133,7 @@ function createSessionCard() {
 }
 
 
-// Details 块
+// details block
 function createDetailsCard() {
   const card = document.createElement('section');
   card.className = 'c-card';
@@ -161,7 +146,6 @@ function createDetailsCard() {
   addDetailRow(list, 'Booking code', booking.code);
   addDetailRow(list, 'Created', formatDateTime(booking.createdAt));
 
-  // 已取消的才有取消时间
   if (booking.cancelledAt !== null) {
     addDetailRow(list, 'Cancelled', formatDateTime(booking.cancelledAt));
   }
@@ -170,7 +154,6 @@ function createDetailsCard() {
   addDetailRow(list, 'Contact email', booking.contactEmail);
   addDetailRow(list, 'Contact phone', booking.contactPhone);
 
-  // 优惠码：WELCOME10, 10% 或 —（没优惠码时接口给的是 null 或空字符串）
   if (booking.promoCode === null || booking.promoCode === '') {
     addDetailRow(list, 'Promo code', '—');
   } else {
@@ -191,7 +174,7 @@ function addDetailRow(list, term, value) {
 }
 
 
-// Tickets 表格
+// tickets table
 function createTicketsCard() {
   const card = document.createElement('section');
   card.className = 'c-card';
@@ -232,7 +215,6 @@ function createTicketsCard() {
     tbody.appendChild(tr);
   }
 
-  // 表尾：小计 / 折扣 / 合计
   const tfoot = card.querySelector('#ticket-foot');
   addFootRow(tfoot, 'Subtotal', formatMoney(booking.subtotal), '');
 
@@ -263,10 +245,6 @@ function addFootRow(tfoot, label, value, extraClass) {
 }
 
 
-// ---------------------------------------------------------------------------
-// 已完成的订单：能不能写影评 15.7
-// ---------------------------------------------------------------------------
-
 async function checkReviewAllowed() {
   let check;
 
@@ -294,10 +272,6 @@ async function checkReviewAllowed() {
 }
 
 
-// ---------------------------------------------------------------------------
-// 取消订单
-// ---------------------------------------------------------------------------
-
 function setupDialog() {
   const dialog = document.querySelector('#cancel-dialog');
 
@@ -316,6 +290,7 @@ function openCancelDialog() {
 }
 
 
+// cancel this booking
 async function cancelBooking() {
   document.querySelector('#cancel-dialog').close();
 
@@ -323,7 +298,6 @@ async function cancelBooking() {
     await request('/bookings/' + booking.id + '/cancel', { method: 'POST' });
     showToast('The booking ' + booking.code + ' is cancelled.', 'success');
 
-    // 重新拿一次详情，页面显示已取消状态 15.6
     booking = await request('/bookings/' + booking.id);
     drawPage();
   } catch (error) {
@@ -331,10 +305,6 @@ async function cancelBooking() {
   }
 }
 
-
-// ---------------------------------------------------------------------------
-// 找不到（404 / 403）
-// ---------------------------------------------------------------------------
 
 function showNotFound() {
   const content = document.querySelector('#booking-content');
