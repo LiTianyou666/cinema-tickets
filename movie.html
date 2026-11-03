@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 本机连不上 fonts.googleapis.com，而 kit/base.css 第一行 @import 了 Google 字体。
+     那个请求会一直挂着 → 样式表永远"加载中" → 浏览器会连脚本执行一起挡住。
+     这条 CSP 直接禁止外部样式，让那个 @import 立刻失败。 -->
+<meta http-equiv="Content-Security-Policy" content="style-src 'self' 'unsafe-inline'; font-src 'self' data:">
+<title>Movie · Cinema.Tickets</title>
+<!-- UI kit：四个 CSS 顺序不能改，文件一个字都不要动 -->
+<link rel="stylesheet" href="kit/tokens.css">
+<link rel="stylesheet" href="kit/base.css">
+<link rel="stylesheet" href="kit/layout.css">
+<link rel="stylesheet" href="kit/components.css">
+</head>
+<body>
+  <div class="l-page">
+
+    <!-- ===== 页头（规格书 5.1）：游客版，登录后由 js/auth.js 替换用户区 ===== -->
+    <header class="l-header">
+      <div class="l-container c-header">
+        <a class="c-header__logo" href="index.html"><svg class="c-icon c-icon--lg" aria-hidden="true"><use href="kit/icons.svg#icon-logo"></use></svg><span>Cinema.Tickets</span></a>
+        <nav class="c-nav" aria-label="Main">
+          <a class="c-nav__link" href="index.html" aria-current="page">Movies</a>
+          <a class="c-nav__link" href="bookings.html">Bookings</a>
+          <a class="c-nav__link" href="cart.html">Cart <span class="c-counter" hidden="hidden">0</span></a>
+        </nav>
+        <div class="c-header__user">
+          <a class="c-btn c-btn--secondary c-btn--sm" href="login.html">Log in</a>
+          <a class="c-btn c-btn--primary c-btn--sm" href="registration.html">Register</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="l-main">
+      <div class="l-container l-stack l-stack--lg">
+
+        <a class="c-back-link" href="index.html"><svg class="c-icon c-icon--sm" aria-hidden="true"><use href="kit/icons.svg#icon-chevron-left"></use></svg>All movies</a>
+
+        <!-- 影片不存在时 JS 把内容换成 c-empty--error -->
+        <div id="movie-content" class="l-stack l-stack--lg">
+
+          <!-- ===== 详情块 ===== -->
+          <section class="l-media" aria-labelledby="movie-title">
+            <div class="c-poster c-poster--lg"><img class="c-poster__img" id="movie-poster" alt="" width="400" height="600"></div>
+            <div class="l-stack">
+              <h1 id="movie-title"></h1>
+              <div class="l-cluster" id="movie-badges"></div>
+              <div class="c-stars c-stars--lg" id="movie-stars"><span class="c-stars__icons" role="img"></span><span class="c-stars__value"></span><span class="c-stars__count"></span></div>
+              <p id="movie-description"></p>
+              <dl class="c-dl">
+                <div class="c-dl__row"><dt class="c-dl__term">Director</dt><dd class="c-dl__desc" id="movie-director"></dd></div>
+                <div class="c-dl__row"><dt class="c-dl__term">Cast</dt><dd class="c-dl__desc" id="movie-cast"></dd></div>
+                <div class="c-dl__row"><dt class="c-dl__term">Country</dt><dd class="c-dl__desc" id="movie-country"></dd></div>
+                <div class="c-dl__row"><dt class="c-dl__term">Duration</dt><dd class="c-dl__desc" id="movie-duration"></dd></div>
+                <div class="c-dl__row"><dt class="c-dl__term">Release date</dt><dd class="c-dl__desc" id="movie-release"></dd></div>
+              </dl>
+            </div>
+          </section>
+
+          <!-- ===== 场次 ===== -->
+          <section class="l-section" aria-labelledby="schedule-title">
+            <div class="l-section__header"><h2 class="l-section__title" id="schedule-title">Schedule</h2></div>
+
+            <!-- 未上映 / 无场次 时 JS 往这里放提示 -->
+            <div id="schedule-alert" hidden></div>
+
+            <nav class="c-date-tabs" id="date-tabs" aria-label="Session dates"></nav>
+
+            <div id="schedule-area" class="l-stack l-stack--lg"></div>
+          </section>
+
+          <!-- ===== 影评 ===== -->
+          <section class="l-section" aria-labelledby="reviews-title">
+            <div class="l-section__header">
+              <h2 class="l-section__title" id="reviews-title">Reviews <span class="l-section__count" id="reviews-count"></span></h2>
+            </div>
+
+            <!-- 自己的影评区：游客提示 / 不能评提示 / 表单 / 自己的影评 -->
+            <div id="own-review-area"></div>
+
+            <div class="l-stack" id="review-list"></div>
+
+            <div id="load-more-area"></div>
+          </section>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="l-container c-footer">© 2026 Cinema.Tickets · Frontend study project</div>
+    </footer>
+
+    <!-- 删除影评的确认对话框（规格书 10.3.7） -->
+    <dialog class="c-dialog" id="delete-review-dialog" aria-labelledby="delete-review-title">
+      <h2 class="c-dialog__title" id="delete-review-title">Delete the review?</h2>
+      <p class="c-dialog__text">The review and its rating will be removed. This action cannot be undone.</p>
+      <div class="c-dialog__actions">
+        <button class="c-btn c-btn--secondary" type="button" id="keep-review">Keep the review</button>
+        <button class="c-btn c-btn--danger" type="button" id="confirm-delete-review">Delete</button>
+      </div>
+    </dialog>
+
+  </div>
+  <script type="module" src="js/pages/movie.js"></script>
+</body>
+</html>

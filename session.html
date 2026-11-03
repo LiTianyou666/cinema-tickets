@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 本机连不上 fonts.googleapis.com，而 kit/base.css 第一行 @import 了 Google 字体。
+     那个请求会一直挂着 → 样式表永远"加载中" → 浏览器会连脚本执行一起挡住。
+     这条 CSP 直接禁止外部样式，让那个 @import 立刻失败。 -->
+<meta http-equiv="Content-Security-Policy" content="style-src 'self' 'unsafe-inline'; font-src 'self' data:">
+<title>Session · Cinema.Tickets</title>
+<!-- UI kit：四个 CSS 顺序不能改，文件一个字都不要动 -->
+<link rel="stylesheet" href="kit/tokens.css">
+<link rel="stylesheet" href="kit/base.css">
+<link rel="stylesheet" href="kit/layout.css">
+<link rel="stylesheet" href="kit/components.css">
+</head>
+<body>
+  <div class="l-page">
+
+    <!-- ===== 页头（规格书 5.1）：游客版，登录后由 js/auth.js 替换用户区 ===== -->
+    <header class="l-header">
+      <div class="l-container c-header">
+        <a class="c-header__logo" href="index.html"><svg class="c-icon c-icon--lg" aria-hidden="true"><use href="kit/icons.svg#icon-logo"></use></svg><span>Cinema.Tickets</span></a>
+        <nav class="c-nav" aria-label="Main">
+          <a class="c-nav__link" href="index.html" aria-current="page">Movies</a>
+          <a class="c-nav__link" href="bookings.html">Bookings</a>
+          <a class="c-nav__link" href="cart.html">Cart <span class="c-counter" hidden="hidden">0</span></a>
+        </nav>
+        <div class="c-header__user">
+          <a class="c-btn c-btn--secondary c-btn--sm" href="login.html">Log in</a>
+          <a class="c-btn c-btn--primary c-btn--sm" href="registration.html">Register</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="l-main">
+      <div class="l-container l-stack l-stack--lg">
+
+        <a class="c-back-link" id="back-link" href="index.html"><svg class="c-icon c-icon--sm" aria-hidden="true"><use href="kit/icons.svg#icon-chevron-left"></use></svg>Back to the movie</a>
+
+        <div class="c-page-title">
+          <div class="c-page-title__main">
+            <h1 id="session-title"></h1>
+            <div class="c-page-title__subtitle">
+              <span class="c-page-title__item"><svg class="c-icon c-icon--sm" aria-hidden="true"><use href="kit/icons.svg#icon-calendar"></use></svg><span id="session-date"></span></span>
+              <span class="c-format" id="session-format"></span>
+              <span class="c-page-title__item"><svg class="c-icon c-icon--sm" aria-hidden="true"><use href="kit/icons.svg#icon-hall"></use></svg><span id="session-hall"></span></span>
+              <span class="c-age" id="session-age"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="l-split">
+          <div class="l-split__main">
+
+            <!-- 提示区：游客 / 已停售 / 达到上限 时 JS 往这里放 alert -->
+            <div id="seats-alert" hidden></div>
+
+            <section class="c-card" aria-label="Seat map">
+              <div class="c-card__body">
+                <div class="c-seatmap" id="seatmap" style="--seat-cols: 10">
+                  <div class="c-seatmap__screen" aria-hidden="true">Screen</div>
+                  <div class="c-seatmap__rows" id="seatmap-rows"></div>
+                </div>
+
+                <ul class="c-legend" aria-label="Legend">
+                  <li class="c-legend__item"><span class="c-seat c-legend__seat" aria-hidden="true"></span><span id="legend-standard">Standard</span></li>
+                  <li class="c-legend__item"><span class="c-seat c-seat--vip c-legend__seat" aria-hidden="true"></span><span id="legend-vip">VIP</span></li>
+                  <li class="c-legend__item"><span class="c-seat c-legend__seat c-legend__seat--occupied" aria-hidden="true"></span>Occupied</li>
+                  <li class="c-legend__item"><span class="c-seat c-legend__seat c-legend__seat--mine" aria-hidden="true"></span>In your cart</li>
+                </ul>
+              </div>
+            </section>
+          </div>
+
+          <aside class="l-split__aside" aria-label="Selected seats">
+            <section class="c-summary" aria-labelledby="summary-title">
+              <h2 class="c-summary__title" id="summary-title">Your seats</h2>
+
+              <ul class="c-summary__list" id="summary-list"></ul>
+
+              <dl class="c-summary__lines">
+                <div class="c-summary__line"><dt>Tickets</dt><dd id="summary-tickets">0</dd></div>
+                <div class="c-summary__total"><dt>Total</dt><dd id="summary-total">0 ₽</dd></div>
+              </dl>
+
+              <p class="c-timer" id="timer" hidden><svg class="c-icon c-icon--sm" aria-hidden="true"><use href="kit/icons.svg#icon-clock"></use></svg><span id="timer-text"></span></p>
+
+              <div class="c-summary__actions" id="summary-actions">
+                <a class="c-btn c-btn--primary c-btn--block" href="cart.html">Go to cart</a>
+              </div>
+
+              <p class="c-summary__note" id="summary-note"></p>
+            </section>
+          </aside>
+        </div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="l-container c-footer">© 2026 Cinema.Tickets · Frontend study project</div>
+    </footer>
+
+  </div>
+  <script type="module" src="js/pages/session.js"></script>
+</body>
+</html>

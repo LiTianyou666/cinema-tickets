@@ -1,0 +1,109 @@
+/* Cinema.Tickets UI kit — tokens.css
+   Design tokens. Connection order: tokens.css, base.css, layout.css, components.css. */
+
+:root {
+  /* Colors: surfaces and text */
+  --color-bg: #0F1115;
+  --color-surface: #171A21;
+  --color-surface-2: #1F232C;
+  --color-surface-3: #282D38;
+  --color-border: #2E3440;
+  --color-border-strong: #6A7385;
+  --color-text: #ECEEF2;
+  --color-text-muted: #A0A7B4;
+  --color-text-subtle: #737B8A;
+
+  /* Colors: accent */
+  --color-accent: #D5383E;
+  --color-accent-hover: #C4323A;
+  --color-accent-contrast: #FFFFFF;
+  --color-accent-text: #FF7B80;
+
+  /* Colors: rating */
+  --color-rating: #F5B83D;
+  --color-rating-empty: #3A4050;
+
+  /* Colors: semantic */
+  --color-success: #3FB950;
+  --color-success-bg: #12261A;
+  --color-success-border: #1F5A2B;
+  --color-warning: #D29922;
+  --color-warning-bg: #2A2112;
+  --color-warning-border: #6B4F14;
+  --color-danger: #F85149;
+  --color-danger-bg: #2D1517;
+  --color-danger-border: #7A2A2A;
+  --color-danger-solid: #C62F2F;
+  --color-danger-solid-hover: #B92B2B;
+  --color-info: #58A6FF;
+  --color-info-bg: #111F33;
+  --color-info-border: #1F4A7A;
+  --color-focus: #58A6FF;
+
+  /* Colors: seats */
+  --color-seat-standard: #3A4150;
+  --color-seat-standard-hover: #4A5366;
+  --color-seat-vip: #6E56CF;
+  --color-seat-vip-hover: #8069DB;
+  --color-seat-occupied: #1E2129;
+  --color-seat-mine: var(--color-accent);
+
+  /* Colors: overlay */
+  --color-overlay: rgba(5, 6, 8, 0.72);
+
+  /* Typography */
+  --font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 18px;
+  --text-xl: 22px;
+  --text-2xl: 28px;
+  --text-3xl: 36px;
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+  --space-9: 48px;
+  --space-10: 64px;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+
+  /* Elevation */
+  --shadow-1: 0 8px 24px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.3);
+  --shadow-2: 0 24px 64px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.35);
+
+  /* Layout */
+  --container-width: 1200px;
+  --header-height: 64px;
+  --aside-width: 380px;
+  --seat-size: 26px;
+  --seat-gap: 6px;
+
+  /* Motion */
+  --transition-fast: 120ms ease-out;
+  --transition-normal: 200ms ease-out;
+
+  /* Stacking */
+  --z-dropdown: 100;
+  --z-header: 200;
+  --z-toast: 300;
+  --z-dialog: 400;
+}
