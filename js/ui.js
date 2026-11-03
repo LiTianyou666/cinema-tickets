@@ -12,7 +12,6 @@ function iconName(type) {
 }
 
 
-// toast, small message in the bottom right corner
 export function showToast(message, type) {
   const stack = getToastStack();
 
@@ -50,7 +49,6 @@ function getToastStack() {
 }
 
 
-// alert block inside the page
 export function showAlert(container, message, type, actionText, actionHref) {
   clearAlerts(container);
 
@@ -88,7 +86,6 @@ export function clearAlerts(container) {
 }
 
 
-// one place that decides how an api error is shown
 export function showApiError(error, alertContainer) {
   if (error.code === 'SERVER_UNAVAILABLE') {
     showToast(error.detail, 'danger');
@@ -107,7 +104,6 @@ export function showApiError(error, alertContainer) {
 //        <span>The email address is invalid.</span>
 //      </p>
 
-// field error, aria-invalid + aria-describedby
 export function setFieldError(input, errorElement, message) {
   input.setAttribute('aria-invalid', 'true');
 
@@ -164,7 +160,6 @@ export function showFieldErrors(errors, fieldMap) {
 }
 
 
-// loading state
 export function setLoading(button, isLoading) {
   if (isLoading) {
     button.classList.add('is-loading');

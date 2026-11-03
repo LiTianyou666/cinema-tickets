@@ -58,7 +58,6 @@ async function main() {
   }
 
 
-  // date select, scheduleDaysAhead days starting today
   function fillDateOptions(daysAhead) {
     const today = new Date();
 
@@ -107,7 +106,6 @@ async function main() {
   }
 
 
-  // request the list and render it
   async function loadMovies() {
     clearAlerts(alertBox);
     showSkeletons();
@@ -145,7 +143,6 @@ async function main() {
   }
 
 
-  // skeleton cards while loading
   function showSkeletons() {
     setBusy(grid, true);
     grid.textContent = '';
@@ -250,7 +247,6 @@ async function main() {
   }
 
 
-  // pagination, real links with the full query string
   function renderPagination(pagination) {
     paginationArea.textContent = '';
 
@@ -313,7 +309,6 @@ async function main() {
   }
 
 
-  // copy all params and change only page
   function buildPageUrl(page) {
     const query = new URLSearchParams(params);
     query.set('page', page);

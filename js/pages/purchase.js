@@ -188,7 +188,6 @@ function drawSummary() {
 }
 
 
-// promo code
 function setupPromo() {
   const input = document.querySelector('#promo-code');
   const applyButton = document.querySelector('#promo-apply');
@@ -310,7 +309,6 @@ function showClosedAlert() {
 }
 
 
-// send the booking
 async function submitBooking() {
   checkSessions();
   drawGroups();

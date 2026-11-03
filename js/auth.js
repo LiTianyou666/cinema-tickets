@@ -2,7 +2,6 @@ import { request, getRefreshToken, clearTokens, isLoggedIn, goToLoginPage } from
 import { formatTickets } from './format.js';
 import { ICON_PATH } from './ui.js';
 
-// pages that are allowed as returnUrl
 const ALLOWED_PAGES = [
   'index.html',
   'movie.html',
@@ -15,7 +14,6 @@ const ALLOWED_PAGES = [
 ];
 
 
-// logged in users get email + log out in the header
 export async function initHeader() {
   if (isLoggedIn() === false) {
     return null;
@@ -57,7 +55,6 @@ export async function initHeader() {
   await updateCartCounter();
 }
 
-// cart counter, hidden for guests and for an empty cart
 export async function updateCartCounter() {
   const counter = document.querySelector('.c-counter');
   if (counter === null) {
@@ -105,7 +102,6 @@ export function redirectIfLoggedIn() {
 }
 
 
-// log out
 export async function logout() {
   const refreshToken = getRefreshToken();
 
@@ -125,7 +121,6 @@ export async function logout() {
 }
 
 
-// only own pages are accepted as returnUrl
 export function getReturnUrl() {
   const params = new URLSearchParams(location.search);
   const value = params.get('returnUrl');

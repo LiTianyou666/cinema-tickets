@@ -1,7 +1,6 @@
 const MASK_PATTERN = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/;
 
 
-// keep digits only
 export function getPhoneDigits(value) {
   let digits = value.replace(/\D/g, '');
 
@@ -13,7 +12,6 @@ export function getPhoneDigits(value) {
 }
 
 
-// rebuild as +7 (xxx) xxx-xx-xx
 export function formatPhone(value) {
   const digits = getPhoneDigits(value);
 
@@ -42,7 +40,6 @@ export function isPhoneComplete(value) {
 }
 
 
-// reformat on every input
 export function applyPhoneMask(input) {
   input.addEventListener('input', function () {
     input.value = formatPhone(input.value);

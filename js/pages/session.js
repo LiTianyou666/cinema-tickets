@@ -91,7 +91,6 @@ function fillLegend() {
 }
 
 
-// build the seat map row by row
 function drawSeatMap(seatMap) {
   const seatmap = document.querySelector('#seatmap');
   const rowsBox = document.querySelector('#seatmap-rows');
@@ -175,7 +174,6 @@ function createSeatButton(seat, closed) {
 }
 
 
-// add a seat or remove it, then reload
 async function handleSeatClick(seat) {
   if (isLoggedIn() === false) {
     return;
@@ -220,7 +218,6 @@ async function handleSeatClick(seat) {
 }
 
 
-// summary of the seats of this session
 function drawSummary(seatMap) {
   const list = document.querySelector('#summary-list');
   list.textContent = '';
@@ -316,7 +313,6 @@ function showPageAlerts(seatMap) {
 }
 
 
-// countdown of the seat hold
 function updateTimer(cart) {
   const timerBox = document.querySelector('#timer');
   const timerText = document.querySelector('#timer-text');

@@ -31,7 +31,6 @@ export function isLoggedIn() {
 
 
 
-// error object built from the problem details response
 export class ApiError extends Error {
   constructor(status, problem) {
     const data = problem || {};
@@ -47,7 +46,6 @@ export class ApiError extends Error {
 }
 
 
-// real refresh call, fetch is used on purpose to avoid a loop
 async function sendRefreshRequest() {
   const refreshToken = getRefreshToken();
   if (refreshToken === null) {
@@ -85,7 +83,6 @@ function refreshOnce() {
   return refreshPromise;
 }
 
-// refresh failed, clear tokens and go to the login page
 export function goToLoginPage() {
   const fileName = location.pathname.split('/').pop();
   const returnUrl = fileName + location.search;
@@ -93,7 +90,6 @@ export function goToLoginPage() {
 }
 
 
-// options:
 
 // the only entry point for http requests
 export async function request(path, options) {

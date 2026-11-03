@@ -39,7 +39,6 @@ async function loadCart() {
 }
 
 
-// load the list and redraw
 async function loadBookings() {
   const list = document.querySelector('#bookings-list');
   const emptyBox = document.querySelector('#bookings-empty');
@@ -112,7 +111,6 @@ function createBookingRow(booking) {
 }
 
 
-// the action depends on the status and on the cancellation cut-off
 function fillActions(actionsBox, booking) {
   if (booking.status === 'Completed') {
     actionsBox.innerHTML =
@@ -174,7 +172,6 @@ function setupDialog() {
 }
 
 
-// confirm before cancelling
 function openCancelDialog(booking) {
   pendingBooking = booking;
 

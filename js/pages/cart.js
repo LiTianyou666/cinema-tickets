@@ -29,7 +29,6 @@ async function start() {
 }
 
 
-// load the cart and redraw
 async function refreshCart() {
   try {
     cart = await request('/cart');
@@ -159,7 +158,6 @@ function createEmptyState() {
 }
 
 
-// remove one seat
 async function removeItem(item) {
   try {
     await request('/cart/items/' + item.id, { method: 'DELETE' });
@@ -190,7 +188,6 @@ async function updateCartAfterChange() {
 }
 
 
-// countdown of the hold
 function updateTimer() {
   const timerBox = document.querySelector('#timer');
   const timerText = document.querySelector('#timer-text');

@@ -1,4 +1,3 @@
-// cinema time zone, set from config when the page starts
 let timeZone = 'UTC';
 
 export function setTimeZone(value) {
@@ -27,7 +26,6 @@ function getParts(isoString) {
 }
 
 
-// money
 const moneyFormatter = new Intl.NumberFormat('en-US'); // 1550 -> '1,550'
 
 export function formatMoney(amount) {
@@ -40,7 +38,6 @@ export function formatDiscount(amount) {
 
 
 // 'Mon, 5 Oct · 19:30'
-// dates and times
 export function formatSessionDateTime(isoString) {
   const p = getParts(isoString);
   return p.weekday + ', ' + p.day + ' ' + p.month + ' · ' + p.hour + ':' + p.minute;

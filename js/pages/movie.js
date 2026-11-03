@@ -125,7 +125,6 @@ async function renderScheduleArea(movie, config, params) {
 }
 
 
-// date tabs, dates without sessions have no link
 function renderDateTabs(tabs, selectedDate, sessionDates, daysAhead, movieId) {
   tabs.textContent = '';
 
@@ -167,7 +166,6 @@ function renderDateTabs(tabs, selectedDate, sessionDates, daysAhead, movieId) {
 }
 
 
-// sessions grouped by format, imax first
 function renderSessions(container, sessions, daysAhead) {
   container.textContent = '';
 
@@ -345,7 +343,6 @@ async function renderOwnReviewArea(movie) {
 }
 
 
-// one form used for both create and edit
 function createReviewForm(movie, existingReview) {
   const isEdit = existingReview !== null;
 
@@ -428,7 +425,6 @@ function createReviewForm(movie, existingReview) {
 }
 
 
-// post a new review or put an existing one
 async function submitReview(movie, form, existingReview) {
   const textarea = form.querySelector('#review-text');
   const textError = form.querySelector('#review-text-error');
@@ -517,7 +513,6 @@ function createMyReview(review, movie) {
 
 let pendingDelete = null;
 
-// delete confirmation, listeners are added once
 function setupDeleteDialog() {
   const dialog = document.querySelector('#delete-review-dialog');
   if (dialog === null) {

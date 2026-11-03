@@ -5,7 +5,6 @@ import {
   showAlert, clearAlerts, showApiError
 } from '../ui.js';
 
-// a logged in user does not stay on this page
 if (redirectIfLoggedIn() === false) {
   start();
 }
@@ -30,7 +29,6 @@ function start() {
     submitButton.disabled = false;
   });
 
-  // submit
   async function sendLogin() {
     clearFieldError(emailInput, emailError);
     clearFieldError(passwordInput, passwordError);

@@ -95,7 +95,6 @@ function createTitleBlock() {
 }
 
 
-// session card
 function createSessionCard() {
   const card = document.createElement('section');
   card.className = 'c-card';
@@ -133,7 +132,6 @@ function createSessionCard() {
 }
 
 
-// details block
 function createDetailsCard() {
   const card = document.createElement('section');
   card.className = 'c-card';
@@ -174,7 +172,6 @@ function addDetailRow(list, term, value) {
 }
 
 
-// tickets table
 function createTicketsCard() {
   const card = document.createElement('section');
   card.className = 'c-card';
@@ -290,7 +287,6 @@ function openCancelDialog() {
 }
 
 
-// cancel this booking
 async function cancelBooking() {
   document.querySelector('#cancel-dialog').close();
 

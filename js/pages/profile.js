@@ -11,7 +11,6 @@ if (requireAuth()) {
   start();
 }
 
-// page start
 async function start() {
   const form = document.querySelector('#profile-form');
   const emailValue = document.querySelector('#profile-email');
@@ -101,7 +100,6 @@ async function start() {
 }
 
 
-// browser validation before saving
 function validate(values) {
   const errors = {};
   const today = getTodayDateString();

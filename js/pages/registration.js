@@ -103,7 +103,6 @@ function getCheckedGender() {
 }
 
 
-// browser validation before sending
 function validate(values) {
   const errors = {};
   const today = getTodayDateString();
