@@ -1,8 +1,8 @@
-// js/pages/bookings.js —— 订单列表页（规格书第 14 章）
+// js/pages/bookings.js —— 订单列表页 第 14 章
 //
 // 参考标记：S09a（各种状态）、S09b（刚下完单）、S09c（取消确认）、S09d（没有订单）
 //
-// 【笨办法】取消成功后重新拉一遍订单列表，不改本地状态。
+// 【笨办法】取消成功后重新拉一遍订单列表，不改本地状态
 
 import { request } from '../api.js';
 import { getConfig } from '../config.js';
@@ -17,7 +17,7 @@ let config = null;
 let cart = null;
 let pendingBooking = null; // 对话框里等待确认的那一条订单
 
-// 受限页面（规格书 5.2.1）
+// 受限页面 5.2.1
 if (requireAuth()) {
   start();
 }
@@ -66,7 +66,7 @@ async function loadBookings() {
   list.textContent = '';
   emptyBox.textContent = '';
 
-  // 一条都没有（规格书 14.6）
+  // 一条都没有 14.6
   if (bookings.length === 0) {
     emptyBox.appendChild(createEmptyState());
     return;
@@ -127,7 +127,7 @@ function createBookingRow(booking) {
 }
 
 
-// 操作区按状态和取消截止时间决定（规格书 14.2）
+// 操作区按状态和取消截止时间决定 14.2
 function fillActions(actionsBox, booking) {
   // 已完成 → 去写影评
   if (booking.status === 'Completed') {
@@ -210,7 +210,7 @@ function openCancelDialog(booking) {
 // 顶部两块提示
 // ---------------------------------------------------------------------------
 
-// ?created=N → "N bookings are created. The cart is empty."（规格书 14.5）
+// ?created=N → N bookings are created. The cart is empty. 14.5
 function showCreatedAlert() {
   const params = new URLSearchParams(location.search);
   const created = params.get('created');
@@ -231,7 +231,7 @@ function showCreatedAlert() {
 }
 
 
-// 购物车不为空 → 提示卡（规格书 14.4）
+// 购物车不为空 → 提示卡 14.4
 function showCartHint() {
   const box = document.querySelector('#cart-hint');
 

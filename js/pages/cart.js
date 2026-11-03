@@ -1,8 +1,8 @@
-// js/pages/cart.js —— 购物车页（规格书第 12 章）
+// js/pages/cart.js —— 购物车页 第 12 章
 //
 // 参考标记：S07a（两个场次）、S07b（部分保留过期）、S07c（空车）
 //
-// 【笨办法】和选座页一样：删一个座位、清空购物车之后，重新 GET /cart 整块重画。
+// 【笨办法】和选座页一样：删一个座位、清空购物车之后，重新 GET /cart 整块重画
 
 import { request } from '../api.js';
 import { getConfig } from '../config.js';
@@ -18,7 +18,7 @@ let cart = null;
 let timerId = null;
 let lastTicketsCount = 0;
 
-// 受限页面：没登录直接跳登录页（规格书 5.2.1）
+// 受限页面：没登录直接跳登录页 5.2.1
 if (requireAuth()) {
   start();
 }
@@ -79,7 +79,7 @@ function drawGroups() {
   groupsBox.textContent = '';
   emptyBox.textContent = '';
 
-  // 空车（规格书 12.6）
+  // 空车 12.6
   if (cart.items.length === 0) {
     emptyBox.appendChild(createEmptyState());
     return;
@@ -213,7 +213,7 @@ async function updateCartAfterChange() {
 
 
 // ---------------------------------------------------------------------------
-// 倒计时（规格书 12.3）
+// 倒计时 12.3
 // ---------------------------------------------------------------------------
 
 function updateTimer() {
@@ -265,7 +265,7 @@ function updateTimer() {
 }
 
 
-// 保留时间到期：重新拉购物车，比较前后票数，少了就提示被移走了多少（规格书 12.3）
+// 保留时间到期：重新拉购物车，比较前后票数，少了就提示被移走了多少 12.3
 async function handleHoldExpired() {
   const before = lastTicketsCount;
 

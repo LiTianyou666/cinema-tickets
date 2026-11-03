@@ -1,9 +1,9 @@
-// js/pages/session.js —— 选座页（规格书第 11 章）
+// js/pages/session.js —— 选座页 第 11 章
 //
 // 参考标记：S06a（已选座）、S06b（座位被抢）、S06c（达到上限）、S06d（已停售）、S06e（游客）
 //
-// 【笨办法】每次选座/取消成功后，把座位图和右侧汇总整块重新拉一遍。
-// 好处：不用在本地猜"加了还是减了"，界面永远等于服务端的真实状态。
+// 【笨办法】每次选座/取消成功后，把座位图和右侧汇总整块重新拉一遍
+// 好处：不用在本地猜加了还是减了，界面永远等于服务端的真实状态
 
 import { request, isLoggedIn } from '../api.js';
 import { getConfig } from '../config.js';
@@ -56,7 +56,7 @@ function fillTitle() {
   document.querySelector('#back-link').href = 'movie.html?id=' + session.movie.id;
   document.querySelector('#session-title').textContent = session.movie.title;
 
-  // 规格书 11.1.2：日期 + 时间段
+  // 11.1.2：日期 + 时间段
   document.querySelector('#session-date').textContent =
     formatWeekdayShortDate(session.startsAt) + ' · ' + formatTimeRange(session.startsAt, session.endsAt);
 
@@ -117,11 +117,11 @@ function drawSeatMap(seatMap) {
   const rowsBox = document.querySelector('#seatmap-rows');
   const closed = session.isBookingOpen === false;
 
-  // 列数用行内自定义属性（规格书允许的唯二例外之一）
+  // 列数用行内自定义属性
   seatmap.setAttribute('style', '--seat-cols: ' + seatMap.seatsPerRow);
   rowsBox.textContent = '';
 
-  // 先把平铺的座位按"行"分到二维数组里
+  // 先把平铺的座位按行分到二维数组里
   const rows = [];
   let r;
   for (r = 0; r < seatMap.rowsCount; r++) {
@@ -176,7 +176,7 @@ function createSeatButton(seat, closed) {
     return button;
   }
 
-  // 在购物车里 → aria-pressed="true"
+  // 在购物车里 → aria-pressed=true
   if (seat.status === 'InMyCart') {
     button.setAttribute('aria-pressed', 'true');
   } else {
@@ -258,7 +258,7 @@ function drawSummary(seatMap) {
   const list = document.querySelector('#summary-list');
   list.textContent = '';
 
-  // 只统计本场次里"我的"座位
+  // 只统计本场次里我的座位
   const mine = [];
   let i;
   for (i = 0; i < seatMap.seats.length; i++) {
@@ -358,7 +358,7 @@ function showPageAlerts(seatMap) {
 
 
 // ---------------------------------------------------------------------------
-// 倒计时（规格书 11.3.2）
+// 倒计时 11.3.2
 // ---------------------------------------------------------------------------
 
 function updateTimer(cart) {

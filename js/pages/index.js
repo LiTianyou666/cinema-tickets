@@ -1,8 +1,8 @@
-// js/pages/index.js —— 影片目录页（规格书第 9 章）
+// js/pages/index.js —— 影片目录页 第 9 章
 //
 // 参考标记：S04a（默认）、S04b（筛选已应用）、S04c（加载中）、S04d（空结果）、S04e（游客第 3 页）
 //
-// 核心思路：页面状态全部存在地址栏。
+// 核心思路：页面状态全部存在地址栏
 //   加载时：读地址栏参数 → 回填筛选控件 → 用同样的参数请求 /api/movies
 //   分页：真正的 <a href> 链接，带着完整查询串，所以刷新、分享都能还原同一页
 
@@ -41,7 +41,7 @@ async function main() {
   fillControls();
   updateMultiselectLabels();
 
-  // 勾选复选框时，同步更新"Any / 2 个标签 / N selected"这段文字
+  // 勾选复选框时，同步更新Any / 2 个标签 / N selected这段文字
   document.addEventListener('change', function (event) {
     if (event.target.className === 'c-check__input') {
       updateMultiselectLabels();
@@ -101,7 +101,7 @@ async function main() {
   }
 
 
-  // 关闭状态的多选显示：Any / 最多两个标签 / N selected（规格书 9.1.4）
+  // 关闭状态的多选显示：Any / 最多两个标签 / N selected 9.1.4
   function updateMultiselectLabels() {
     for (const details of document.querySelectorAll('.c-multiselect')) {
       const checked = details.querySelectorAll('.c-check__input:checked');
@@ -220,7 +220,7 @@ async function main() {
     const poster = card.querySelector('.c-poster__img');
     poster.src = movie.posterUrl;
 
-    // 上映日期晚于今天 → 加 Coming soon 徽章（规格书 9.2.2）
+    // 上映日期晚于今天 → 加 Coming soon 徽章 9.2.2
     if (movie.releaseDate > getTodayDateString()) {
       const badge = document.createElement('span');
       badge.className = 'c-badge c-badge--info c-movie-card__badge';

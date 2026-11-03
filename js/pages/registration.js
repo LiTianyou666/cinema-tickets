@@ -1,4 +1,4 @@
-// js/pages/registration.js —— 注册页（规格书第 7 章）
+// js/pages/registration.js —— 注册页 第 7 章
 //
 // 参考标记：参考资料/snippets/S02a.html（默认）、S02b.html（校验错误）、S02c.html（邮箱已注册）
 //
@@ -13,11 +13,11 @@ import {
   setFieldError, showAlert, clearAlerts, showApiError
 } from '../ui.js';
 
-// 校验规则（规格书 5.4 的原文规则）
+// 校验规则
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PASSWORD_PATTERN = /^(?=.*[A-Za-z])(?=.*\d).{6,64}$/;
 
-// 已登录用户不该停在注册页（规格书 5.2.3）
+// 已登录用户不该停在注册页 5.2.3
 if (redirectIfLoggedIn() === false) {
   start();
 }
@@ -54,7 +54,7 @@ function start() {
 
   submitButton.disabled = false;
 
-  // 浏览器"后退"回来时模块不会重新执行，这里补一次
+  // 浏览器后退回来时模块不会重新执行，这里补一次
   window.addEventListener('pageshow', function () {
     submitButton.disabled = false;
   });
@@ -80,7 +80,7 @@ function start() {
       phoneNumber: phoneInput.value
     };
 
-    // 3. 浏览器先校验（规则和文案都来自规格书 5.4）
+    // 3. 浏览器先校验（规则和文案都来自5.4）
     const errors = validate(values);
 
     if (Object.keys(errors).length > 0) {
@@ -102,7 +102,7 @@ function start() {
       location.href = 'index.html';
     } catch (error) {
       if (error.code === 'EMAIL_TAKEN') {
-        // 规格书 7.5：上方 alert 显示 detail，同时把邮箱字段标为无效
+        // 7.5：上方 alert 显示 detail，同时把邮箱字段标为无效
         showAlert(alertBox, error.detail, 'danger');
         setFieldError(emailInput, fieldMap.email.error, error.detail);
       } else if (error.code === 'VALIDATION_ERROR') {

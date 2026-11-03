@@ -1,15 +1,15 @@
-// js/format.js —— 显示格式化（规格书 5.5 有完整表格，输出必须逐个对上）
+// js/format.js —— 显示格式化
 //
 // 用法：
 //   页面启动时：const config = await getConfig(); setTimeZone(config.timeZone);
-//   之后就可以直接调用 formatMoney(1550) 这样的函数。
+//   之后就可以直接调用 formatMoney(1550) 这样的函数
 //
 // 两个要点：
-//   1. 所有日期时间都按【影院时区】显示，与电脑时区无关 → Intl 必须传 timeZone。
-//   2. 不让 Intl 直接输出整串（不同地区格式会变），而是用 formatToParts() 取零件自己拼。
+//   1. 所有日期时间都按【影院时区】显示，与电脑时区无关 → Intl 必须传 timeZone
+//   2. 不让 Intl 直接输出整串（不同地区格式会变），而是用 formatToParts() 取零件自己拼
 
-// 影院时区。页面启动时用 config.timeZone 覆盖。
-// 默认给 UTC（中性值）：万一忘了设置，时间会明显不对，一眼能看出来。
+// 影院时区。页面启动时用 config.timeZone 覆盖
+// 默认给 UTC（中性值）：万一忘了设置，时间会明显不对，一眼能看出来
 let timeZone = 'UTC';
 
 export function setTimeZone(value) {
@@ -128,7 +128,7 @@ export function formatSeat(row, number) {
   return 'Row ' + row + ', Seat ' + number;
 }
 
-// 今天的日期，YYYY-MM-DD（电脑本地时间，用于校验"生日不能晚于今天"）
+// 今天的日期，YYYY-MM-DD（电脑本地时间，用于校验生日不能晚于今天）
 export function getTodayDateString() {
   const now = new Date();
   const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -150,7 +150,7 @@ export function formatWeekdayShortDate(isoString) {
   return p.weekday + ', ' + p.day + ' ' + p.month;
 }
 
-// '2026-10-26' -> '26 Oct'（"Coming soon ·" 徽章用，和 mockup 一致，不带年）
+// '2026-10-26' -> '26 Oct'（Coming soon · 徽章用，和 mockup 一致，不带年）
 export function formatShortDate(isoString) {
   const p = getParts(isoString);
   return p.day + ' ' + p.month;
@@ -174,7 +174,7 @@ export function formatMovies(count) {
 
 
 // ---------------------------------------------------------------------------
-// 枚举的显示值（规格书附录 A.4）
+// 枚举的显示值 附录 A.4
 // 写法：查表，查不到就原样返回（服务端以后新增枚举值也不会显示成空白）
 // ---------------------------------------------------------------------------
 

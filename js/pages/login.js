@@ -1,4 +1,4 @@
-// js/pages/login.js —— 登录页（规格书第 6 章）
+// js/pages/login.js —— 登录页 第 6 章
 //
 // 参考标记：参考资料/snippets/S01a.html（默认）、S01b.html（登录失败）
 //
@@ -11,7 +11,7 @@ import {
   showAlert, clearAlerts, showApiError
 } from '../ui.js';
 
-// 已登录的用户不该停在登录页（规格书 5.2.3）
+// 已登录的用户不该停在登录页 5.2.3
 // redirectIfLoggedIn() 返回 true 表示已经跳转了，那就不必再初始化页面
 if (redirectIfLoggedIn() === false) {
   start();
@@ -32,13 +32,13 @@ function start() {
     sendLogin();
   });
 
-  // 监听器挂好了，才把按钮启用。
-  // 按钮在 HTML 里是 disabled 的，这样"脚本还没跑起来"时点不动按钮，
-  // 表单就不会被原生提交到静态服务器（那会得到 405 Method Not Allowed）。
+  // 监听器挂好了，才把按钮启用
+  // 按钮在 HTML 里是 disabled 的，这样脚本还没跑起来时点不动按钮，
+  // 表单就不会被原生提交到静态服务器（那会得到 405 Method Not Allowed）
   submitButton.disabled = false;
 
-  // 浏览器"后退"回到本页时（bfcache 恢复），模块不会重新执行，
-  // 按钮可能还停在禁用状态，这里补一下，保证回来也能点。
+  // 浏览器后退回到本页时（bfcache 恢复），模块不会重新执行，
+  // 按钮可能还停在禁用状态，这里补一下，保证回来也能点
   window.addEventListener('pageshow', function () {
     submitButton.disabled = false;
   });
@@ -49,7 +49,7 @@ function start() {
     clearFieldError(passwordInput, passwordError);
     clearAlerts(alertBox);
 
-    // 2. 按钮进入"请求中"状态，防止重复点击
+    // 2. 按钮进入请求中状态，防止重复点击
     setLoading(submitButton, true);
 
     try {
@@ -73,7 +73,7 @@ function start() {
           password: { input: passwordInput, error: passwordError }
         });
       } else if (error.code === 'INVALID_CREDENTIALS') {
-        // 规格书 6.3：提示显示在字段上方，邮箱保留，密码清空
+        // 6.3：提示显示在字段上方，邮箱保留，密码清空
         showAlert(alertBox, error.detail, 'danger');
         passwordInput.value = '';
       } else {

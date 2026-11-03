@@ -1,7 +1,7 @@
 // js/api.js —— 所有网络请求的唯一入口
 //
-// 风格约定：代码（变量名、函数名、字符串）用简单英文，注释用中文。
-// 页面不写 fetch()，只调用这里的 request()。
+// 风格约定：代码（变量名、函数名、字符串）用简单英文，注释用中文
+// 页面不写 fetch()，只调用这里的 request()
 
 const BASE_URL = 'https://api.cinema.int.hardcoder.ru/api';
 
@@ -9,7 +9,7 @@ const BASE_URL = 'https://api.cinema.int.hardcoder.ru/api';
 const ACCESS_KEY = 'cinema.accessToken';
 const REFRESH_KEY = 'cinema.refreshToken';
 
-// 服务器连不上 / 5xx 时给用户看的文案（规格书 4.3.4 规定的原文）
+// 服务器连不上 / 5xx 时给用户看的文案
 const SERVER_DOWN_TEXT = 'The server is unavailable. Try again later.';
 
 
@@ -46,7 +46,7 @@ export function isLoggedIn() {
 // 2. 错误对象
 //
 // 服务端出错时返回 ProblemDetails：{ status, code, detail, errors, affectedIds }
-// 统一包成一个 Error，页面 catch 之后看 err.code 决定怎么显示。
+// 统一包成一个 Error，页面 catch 之后看 err.code 决定怎么显示
 // ---------------------------------------------------------------------------
 
 export class ApiError extends Error {
@@ -70,7 +70,7 @@ export class ApiError extends Error {
 // ---------------------------------------------------------------------------
 
 // 真正发刷新请求。故意用 fetch 而不用 request()：
-// 否则刷新自己收到 401 又会触发刷新，无限循环。
+// 否则刷新自己收到 401 又会触发刷新，无限循环
 async function sendRefreshRequest() {
   const refreshToken = getRefreshToken();
   if (refreshToken === null) {
@@ -85,7 +85,7 @@ async function sendRefreshRequest() {
       body: JSON.stringify({ refreshToken: refreshToken })
     });
   } catch (error) {
-    // 网络断了：不当成"刷新失败"，让上层按服务器不可用处理
+    // 网络断了：不当成刷新失败，让上层按服务器不可用处理
     throw new ApiError(0, { code: 'SERVER_UNAVAILABLE', detail: SERVER_DOWN_TEXT });
   }
 
@@ -97,8 +97,8 @@ async function sendRefreshRequest() {
   return true;
 }
 
-// refresh token 只能用一次，所以同一时刻只能有一个刷新请求。
-// refreshPromise 记住"正在进行的那次刷新"：第一个 401 发起，后面的 401 直接等它。
+// refresh token 只能用一次，所以同一时刻只能有一个刷新请求
+// refreshPromise 记住正在进行的那次刷新：第一个 401 发起，后面的 401 直接等它
 let refreshPromise = null;
 
 function refreshOnce() {
@@ -110,7 +110,7 @@ function refreshOnce() {
   return refreshPromise;
 }
 
-// 刷新失败（token 无效）→ 清掉 token，跳登录页并记住当前地址（规格书 4.2.5）
+// 刷新失败（token 无效）→ 清掉 token，跳登录页并记住当前地址 4.2.5
 // auth.js 的 requireAuth() 也复用它，所以 export
 export function goToLoginPage() {
   const fileName = location.pathname.split('/').pop();
@@ -126,7 +126,7 @@ export function goToLoginPage() {
 //   method   'GET' | 'POST' | 'PUT' | 'DELETE'，默认 'GET'
 //   body     要发送的对象；GET 和 DELETE 不用传
 //   auth     默认带 token；登录、注册、/config 传 false
-//   retried  内部用：标记"这是刷新之后的重放"，防止 401 死循环
+//   retried  内部用：标记这是刷新之后的重放，防止 401 死循环
 // ---------------------------------------------------------------------------
 
 export async function request(path, options) {

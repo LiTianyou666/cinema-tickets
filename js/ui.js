@@ -1,8 +1,8 @@
 // js/ui.js —— 页面通用小工具
 //
-// 页面脚本不用各写一遍 toast、提示框、字段错误、加载状态。
+// 页面脚本不用各写一遍 toast、提示框、字段错误、加载状态
 //
-// 注意：JS 只能改 kit 定义的类与属性，不设样式。
+// 注意：JS 只能改 kit 定义的类与属性，不设样式
 
 // 提示类型 → 图标名（与 kit 里 c-alert / c-toast 的用法一致）
 const ICON_BY_TYPE = {
@@ -22,7 +22,7 @@ function iconName(type) {
 
 
 // ---------------------------------------------------------------------------
-// 1. toast：右下角浮出的小提示，点关闭按钮消失（规格书附录 A.3）
+// 1. toast：右下角浮出的小提示，点关闭按钮消失 附录 A.3
 //    用法：showToast('The profile is saved.', 'success');
 // ---------------------------------------------------------------------------
 
@@ -68,7 +68,7 @@ function getToastStack() {
 
 // ---------------------------------------------------------------------------
 // 2. alert：页面上的一块提示（登录失败、下单被关闭之类）
-//    页面里先留一个空容器，例如 <div id="form-alert"></div>，JS 往里放提示框。
+//    页面里先留一个空容器，例如 <div id=form-alert></div>，JS 往里放提示框
 // ---------------------------------------------------------------------------
 
 export function showAlert(container, message, type, actionText, actionHref) {
@@ -76,7 +76,7 @@ export function showAlert(container, message, type, actionText, actionHref) {
 
   const alert = document.createElement('div');
   alert.className = 'c-alert c-alert--' + type;
-  // 错误和警告用 role="alert"，其他用 role="status"（规格书第 8 章）
+  // 错误和警告用 role=alert，其他用 role=status 第 8 章
   alert.setAttribute('role', type === 'danger' || type === 'warning' ? 'alert' : 'status');
 
   let html =
@@ -112,7 +112,7 @@ export function clearAlerts(container) {
 
 // ---------------------------------------------------------------------------
 // 3. 统一的接口错误显示
-//    服务器不可用 → toast；其他业务错误 → 页面上的 alert（规格书 4.3）
+//    服务器不可用 → toast；其他业务错误 → 页面上的 alert 4.3
 // ---------------------------------------------------------------------------
 
 export function showApiError(error, alertContainer) {
@@ -129,20 +129,20 @@ export function showApiError(error, alertContainer) {
 
 
 // ---------------------------------------------------------------------------
-// 4. 表单字段错误（规格书 5.4）
+// 4. 表单字段错误 5.4
 //    错误元素的标记结构（照 mockup 抄的）：
-//      <p class="c-field__error" id="login-email-error">
-//        <svg class="c-icon c-icon--sm" ...><use href="kit/icons.svg#icon-error"></use></svg>
+//      <p class=c-field__error id=login-email-error>
+//        <svg class=c-icon c-icon--sm ...><use href=kit/icons.svg#icon-error></use></svg>
 //        <span>The email address is invalid.</span>
 //      </p>
-//    所以文字要写进里面的 <span>，不能整个 <p> 覆盖掉，否则图标就没了。
+//    所以文字要写进里面的 <span>，不能整个 <p> 覆盖掉，否则图标就没了
 // ---------------------------------------------------------------------------
 
 export function setFieldError(input, errorElement, message) {
   input.setAttribute('aria-invalid', 'true');
 
   // 输入框本来可能已经用 aria-describedby 指向 hint（提示文字），
-  // 这里把错误元素"追加"进去，而不是把它覆盖掉
+  // 这里把错误元素追加进去，而不是把它覆盖掉
   const describedBy = input.getAttribute('aria-describedby');
 
   if (describedBy === null) {
@@ -203,7 +203,7 @@ export function showFieldErrors(errors, fieldMap) {
 // 5. 加载状态
 // ---------------------------------------------------------------------------
 
-// 按钮请求中：加 is-loading、aria-busy，并暂时禁用（规格书 5.3.2）
+// 按钮请求中：加 is-loading、aria-busy，并暂时禁用 5.3.2
 export function setLoading(button, isLoading) {
   if (isLoading) {
     button.classList.add('is-loading');
@@ -216,7 +216,7 @@ export function setLoading(button, isLoading) {
   }
 }
 
-// 整块区域加载中：容器加/去 aria-busy（规格书 5.3.1）
+// 整块区域加载中：容器加/去 aria-busy 5.3.1
 export function setBusy(container, isBusy) {
   if (isBusy) {
     container.setAttribute('aria-busy', 'true');

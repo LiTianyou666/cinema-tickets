@@ -1,4 +1,4 @@
-// js/pages/purchase.js —— 结算页（规格书第 13 章）
+// js/pages/purchase.js —— 结算页 第 13 章
 //
 // 参考标记：S08a（默认）、S08b（优惠码已应用）、S08c（优惠码被拒）、S08d（某场次已关闭）
 //
@@ -22,7 +22,7 @@ let cart = null;
 let appliedPromo = null;      // 优惠码校验成功后的结果
 let closedSessionIds = [];    // 已经不能订的场次 id
 
-// 受限页面：没登录直接跳登录页（规格书 5.2.1）
+// 受限页面：没登录直接跳登录页 5.2.1
 if (requireAuth()) {
   start();
 }
@@ -42,7 +42,7 @@ async function start() {
     return;
   }
 
-  // 空车直接回购物车（规格书 13.1）
+  // 空车直接回购物车 13.1
   if (cart.items.length === 0) {
     location.href = 'cart.html';
     return;
@@ -73,7 +73,7 @@ function fillContact(profile) {
 
 
 // ---------------------------------------------------------------------------
-// 场次时间校验（规格书 13.6）
+// 场次时间校验 13.6
 // ---------------------------------------------------------------------------
 
 function checkSessions() {
@@ -254,7 +254,7 @@ function setupPromo() {
 }
 
 
-// 应用成功：输入框整块换成 "CODE · 说明 + Remove"
+// 应用成功：输入框整块换成 CODE · 说明 + Remove
 function showPromoApplied(result) {
   const box = document.querySelector('#promo');
   box.className = 'c-promo is-success';
@@ -351,7 +351,7 @@ function showClosedAlert() {
 
 
 async function submitBooking() {
-  // 提交前再查一次时间（规格书 13.6）
+  // 提交前再查一次时间 13.6
   checkSessions();
   drawGroups();
   drawConfirmState();

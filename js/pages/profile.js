@@ -1,4 +1,4 @@
-// js/pages/profile.js —— 个人资料页（规格书第 8 章）
+// js/pages/profile.js —— 个人资料页 第 8 章
 //
 // 参考标记：参考资料/snippets/S03a.html（默认）、S03b.html（已保存 + 校验错误）
 //
@@ -13,7 +13,7 @@ import {
   clearAlerts, showApiError, showToast, setBusy
 } from '../ui.js';
 
-// 受限页面：没登录就跳登录页并带上 returnUrl（规格书 5.2.1）
+// 受限页面：没登录就跳登录页并带上 returnUrl 5.2.1
 if (requireAuth()) {
   start();
 }
@@ -36,7 +36,7 @@ async function start() {
 
   applyPhoneMask(phoneInput);
 
-  // 页头：换成"邮箱 + Log out"，并顺手拿到 profile，省掉一次重复请求
+  // 页头：换成邮箱 + Log out，并顺手拿到 profile，省掉一次重复请求
   setBusy(document.querySelector('.l-main'), true);
   const profile = await initHeader();
   setBusy(document.querySelector('.l-main'), false);
@@ -113,7 +113,7 @@ async function start() {
 }
 
 
-// 浏览器端校验（规则与文案来自规格书 5.4）
+// 浏览器端校验（规则与文案来自5.4）
 function validate(values) {
   const errors = {};
   const today = getTodayDateString();

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- 本机连不上 fonts.googleapis.com，而 kit/base.css 第一行 @import 了 Google 字体。
      那个请求会一直挂着 → 样式表永远"加载中" → 浏览器会连脚本执行一起挡住。
-     这条 CSP 直接禁止外部样式，让那个 @import 立刻失败。 -->
+     这条 CSP 直接禁止外部样式，让那个 @import 立刻失败 -->
 <meta http-equiv="Content-Security-Policy" content="style-src 'self' 'unsafe-inline'; font-src 'self' data:">
 <title>Bookings · Cinema.Tickets</title>
 <!-- UI kit：四个 CSS 顺序不能改，文件一个字都不要动 -->
@@ -17,7 +17,7 @@
 <body>
   <div class="l-page">
 
-    <!-- ===== 页头（规格书 5.1）：游客版，登录后由 js/auth.js 替换用户区 ===== -->
+    <!-- ===== 页头 5.1：游客版，登录后由 js/auth.js 替换用户区 ===== -->
     <header class="l-header">
       <div class="l-container c-header">
         <a class="c-header__logo" href="index.html"><svg class="c-icon c-icon--lg" aria-hidden="true"><use href="kit/icons.svg#icon-logo"></use></svg><span>Cinema.Tickets</span></a>
@@ -61,7 +61,7 @@
       <div class="l-container c-footer">© 2026 Cinema.Tickets · Frontend study project</div>
     </footer>
 
-    <!-- 取消订单的确认对话框（规格书 14.3） -->
+    <!-- 取消订单的确认对话框 14.3 -->
     <dialog class="c-dialog" id="cancel-dialog" aria-labelledby="cancel-dialog-title">
       <h2 class="c-dialog__title" id="cancel-dialog-title"></h2>
       <p class="c-dialog__text">The seats will be released. This action cannot be undone.</p>

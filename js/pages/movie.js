@@ -1,4 +1,4 @@
-// js/pages/movie.js —— 影片详情页（规格书 10.1 / 10.2 / 10.3）
+// js/pages/movie.js —— 影片详情页 10.1 / 10.2 / 10.3
 //
 // 参考标记：S05a（今天有场次）、S05b（自己的影评）、S05g（未上映）、S05f（游客）
 //
@@ -22,7 +22,7 @@ import {
   setLoading, setFieldError, clearFieldError, showToast
 } from '../ui.js';
 
-// 场次分组顺序（规格书 10.2.3：IMAX → 3D → 2D）
+// 场次分组顺序
 const FORMAT_ORDER = ['Imax', 'ThreeD', 'TwoD'];
 
 main();
@@ -115,7 +115,7 @@ async function renderScheduleArea(movie, config, params) {
   const scheduleArea = document.querySelector('#schedule-area');
   const scheduleAlert = document.querySelector('#schedule-alert');
 
-  // 未上映：用 alert 替代整个场次区（规格书 10.2.4）
+  // 未上映：用 alert 替代整个场次区 10.2.4
   if (movie.releaseDate > getTodayDateString()) {
     tabs.textContent = '';
     scheduleArea.textContent = '';
@@ -180,7 +180,7 @@ function renderDateTabs(tabs, selectedDate, sessionDates, daysAhead, movieId) {
       tab.setAttribute('aria-current', 'date');
     }
 
-    // 这一天没有场次 → 不给链接，只标 aria-disabled（规格书 10.2.1）
+    // 这一天没有场次 → 不给链接，只标 aria-disabled 10.2.1
     if (sessionDates.indexOf(iso) === -1) {
       tab.setAttribute('aria-disabled', 'true');
     } else {
@@ -308,7 +308,7 @@ async function loadReviews(movie, page, append) {
 
   moreArea.textContent = '';
 
-  // 还有下一页 → 放"Show more reviews"
+  // 还有下一页 → 放Show more reviews
   if (data.pagination.currentPage < data.pagination.pageCount) {
     const button = document.createElement('button');
     button.className = 'c-btn c-btn--secondary';
@@ -352,7 +352,7 @@ async function renderOwnReviewArea(movie) {
   const area = document.querySelector('#own-review-area');
   area.textContent = '';
 
-  // 游客：提示登录（规格书 10.3.4）
+  // 游客：提示登录 10.3.4
   if (isLoggedIn() === false) {
     showAlert(area, 'Log in to leave a review.', 'info', 'Log in',
       'login.html?returnUrl=' + encodeURIComponent('movie.html?id=' + movie.id));
@@ -424,7 +424,7 @@ function createReviewForm(movie, existingReview) {
   const counter = form.querySelector('.c-review-form__counter');
   const submitButton = form.querySelector('#review-submit');
 
-  // 选星 → 更新 "8 / 10"
+  // 选星 → 更新 8 / 10
   form.addEventListener('change', function (event) {
     if (event.target.className === 'c-stars-input__radio') {
       ratingOutput.textContent = event.target.value + ' / 10';
@@ -480,7 +480,7 @@ async function submitReview(movie, form, existingReview) {
 
   clearFieldError(textarea, textError);
 
-  // 浏览器先校验（规则和文案来自规格书 5.4）
+  // 浏览器先校验（规则和文案来自5.4）
   if (text.length < 10 || text.length > 1000) {
     setFieldError(textarea, textError, 'The review text must be 10 to 1000 characters long.');
     return;
@@ -557,7 +557,7 @@ function createMyReview(review, movie) {
 }
 
 
-// 删除确认对话框（规格书 10.3.7）
+// 删除确认对话框 10.3.7
 let pendingDelete = null;
 
 function setupDeleteDialog() {

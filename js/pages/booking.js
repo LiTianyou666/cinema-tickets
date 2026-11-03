@@ -1,8 +1,8 @@
-// js/pages/booking.js —— 订单详情页（规格书第 15 章）
+// js/pages/booking.js —— 订单详情页 第 15 章
 //
 // 参考标记：S10a（Active）、S10b（Cancelled）、S10c（Completed）、S10d（找不到）
 //
-// 整块内容都用 JS 生成（数据全是接口给的，页面里没什么静态内容）。
+// 整块内容都用 JS 生成（数据全是接口给的，页面里没什么静态内容）
 
 import { request } from '../api.js';
 import { getConfig } from '../config.js';
@@ -17,7 +17,7 @@ import { showAlert, showToast } from '../ui.js';
 let config = null;
 let booking = null;
 
-// 受限页面（规格书 5.2.1）
+// 受限页面 5.2.1
 if (requireAuth()) {
   start();
 }
@@ -40,7 +40,7 @@ async function start() {
   try {
     booking = await request('/bookings/' + bookingId);
   } catch (error) {
-    // 404 和 403 都按"找不到"处理（规格书 15.1）
+    // 404 和 403 都按找不到处理 15.1
     showNotFound();
     return;
   }
@@ -66,7 +66,7 @@ function drawPage() {
   content.appendChild(createDetailsCard());
   content.appendChild(createTicketsCard());
 
-  // 已完成的订单可能要显示"可以写影评"的提示，先留个位置
+  // 已完成的订单可能要显示可以写影评的提示，先留个位置
   const reviewBox = document.createElement('div');
   reviewBox.id = 'review-alert';
   reviewBox.hidden = true;
@@ -170,7 +170,7 @@ function createDetailsCard() {
   addDetailRow(list, 'Contact email', booking.contactEmail);
   addDetailRow(list, 'Contact phone', booking.contactPhone);
 
-  // 优惠码："WELCOME10, 10%" 或 "—"（没优惠码时接口给的是 null 或空字符串）
+  // 优惠码：WELCOME10, 10% 或 —（没优惠码时接口给的是 null 或空字符串）
   if (booking.promoCode === null || booking.promoCode === '') {
     addDetailRow(list, 'Promo code', '—');
   } else {
@@ -264,7 +264,7 @@ function addFootRow(tfoot, label, value, extraClass) {
 
 
 // ---------------------------------------------------------------------------
-// 已完成的订单：能不能写影评（规格书 15.7）
+// 已完成的订单：能不能写影评 15.7
 // ---------------------------------------------------------------------------
 
 async function checkReviewAllowed() {
@@ -323,7 +323,7 @@ async function cancelBooking() {
     await request('/bookings/' + booking.id + '/cancel', { method: 'POST' });
     showToast('The booking ' + booking.code + ' is cancelled.', 'success');
 
-    // 重新拿一次详情，页面显示已取消状态（规格书 15.6）
+    // 重新拿一次详情，页面显示已取消状态 15.6
     booking = await request('/bookings/' + booking.id);
     drawPage();
   } catch (error) {

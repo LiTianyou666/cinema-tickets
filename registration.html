@@ -7,7 +7,7 @@
      那个请求会一直挂着 → 样式表永远"加载中" → 浏览器会连脚本执行一起挡住
      （表现：按钮点不动、页面一直在加载）。
      这条 CSP 直接禁止外部样式，让那个 @import 立刻失败，页面就能正常跑。
-     只限制样式来源，不影响接口请求和图片。 -->
+     只限制样式来源，不影响接口请求和图片 -->
 <meta http-equiv="Content-Security-Policy" content="style-src 'self' 'unsafe-inline'; font-src 'self' data:">
 <title>Register · Cinema.Tickets</title>
 <!-- UI kit：四个 CSS 顺序不能改，文件一个字都不要动 -->
@@ -19,9 +19,9 @@
 <body>
   <div class="l-page">
 
-    <!-- ===== 页头（规格书 5.1） =====
+    <!-- ===== 页头 5.1 =====
          这里放的是【游客版】。登录后由 js/auth.js 的 initHeader() 换成
-         【邮箱链接 + Log out 按钮】，并更新购物车计数器。 -->
+         【邮箱链接 + Log out 按钮】，并更新购物车计数器 -->
     <header class="l-header">
       <div class="l-container c-header">
         <a class="c-header__logo" href="index.html"><svg class="c-icon c-icon--lg" aria-hidden="true"><use href="kit/icons.svg#icon-logo"></use></svg><span>Cinema.Tickets</span></a>
@@ -45,7 +45,7 @@
 
             <form class="c-card__body" id="reg-form" method="post" novalidate="novalidate">
 
-              <!-- 邮箱已注册时 JS 往这里放 c-alert--danger（规格书 7.5） -->
+              <!-- 邮箱已注册时 JS 往这里放 c-alert--danger 7.5 -->
               <div id="form-alert" hidden></div>
 
               <div class="c-field">

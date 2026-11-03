@@ -1,13 +1,13 @@
-// js/auth.js —— 登录态、访问控制、页头、登出（规格书 5.1 / 5.2）
+// js/auth.js —— 登录态、访问控制、页头、登出 5.1 / 5.2
 //
-// 页头在 HTML 里写的是【游客版】；登录后由 initHeader() 换成"邮箱链接 + Log out"。
-// 受限页面开头调用 requireAuth()；登录页、注册页调用 redirectIfLoggedIn()。
+// 页头在 HTML 里写的是【游客版】；登录后由 initHeader() 换成邮箱链接 + Log out
+// 受限页面开头调用 requireAuth()；登录页、注册页调用 redirectIfLoggedIn()
 
 import { request, getRefreshToken, clearTokens, isLoggedIn, goToLoginPage } from './api.js';
 import { formatTickets } from './format.js';
 import { ICON_PATH } from './ui.js';
 
-// 允许作为 returnUrl 的站内页面（规格书 5.2.2：只接受站内相对地址）
+// 允许作为 returnUrl 的站内页面
 const ALLOWED_PAGES = [
   'index.html',
   'movie.html',
@@ -68,7 +68,7 @@ export async function initHeader() {
   await updateCartCounter();
 }
 
-// 购物车计数器：游客和空车都要隐藏（规格书 5.1.3）
+// 购物车计数器：游客和空车都要隐藏 5.1.3
 export async function updateCartCounter() {
   const counter = document.querySelector('.c-counter');
   if (counter === null) {
