@@ -136,7 +136,7 @@ export async function logout() {
         body: { refreshToken: refreshToken }
       });
     } catch (error) {
-      // 服务器出错也要在本地登出，别把用户卡在已登录状态。
+      // 服务器出错也要在本地登出，别把用户卡在已登录状态
     }
   }
 

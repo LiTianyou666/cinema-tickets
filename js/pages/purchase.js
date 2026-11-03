@@ -5,7 +5,7 @@
 // 三件事：
 //   1. 显示资料（只读）+ 支付方式 + 优惠码
 //   2. 检查每个场次是否还来得及订（开场前 bookingCutoffMinutes 停止售票）
-//   3. 点 Confirm booking → POST /api/bookings → 跳订单页。
+//   3. 点 Confirm booking → POST /api/bookings → 跳订单页
 
 import { request } from '../api.js';
 import { getConfig } from '../config.js';
@@ -167,7 +167,7 @@ function createGroup(group) {
     seatsBox.appendChild(createSeatRow(group.items[i]));
   }
 
-  // 场次已经不能订 → 加一行错误说明。
+  // 场次已经不能订 → 加一行错误说明
   if (closed === true) {
     const errorLine = document.createElement('p');
     errorLine.className = 'c-cart-group__error';

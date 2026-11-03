@@ -178,7 +178,7 @@ function createEmptyState() {
 
 
 // ---------------------------------------------------------------------------
-// 删除一个座位 / 清空购物车。
+// 删除一个座位 / 清空购物车
 // ---------------------------------------------------------------------------
 
 async function removeItem(item) {
@@ -205,7 +205,7 @@ async function clearCart() {
 }
 
 
-// 购物车变了：重画页面 + 更新页头计数器。
+// 购物车变了：重画页面 + 更新页头计数器
 async function updateCartAfterChange() {
   await refreshCart();
   await updateCartCounter();

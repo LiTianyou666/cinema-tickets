@@ -1,4 +1,4 @@
-// js/ui.js —— 页面通用小工具。
+// js/ui.js —— 页面通用小工具
 //
 // 页面脚本不用各写一遍 toast、提示框、字段错误、加载状态
 //
@@ -41,7 +41,7 @@ export function showToast(message, type) {
     '<use href="' + ICON_PATH + '#icon-close"></use></svg></button>';
 
   // 消息用 textContent 写入，不拼进 innerHTML：
-  // 万一消息里带 < 或 >，也不会被浏览器当成标签。
+  // 万一消息里带 < 或 >，也不会被浏览器当成标签
   toast.querySelector('.c-toast__text').textContent = message;
 
   toast.querySelector('.c-toast__close').addEventListener('click', function () {
@@ -76,7 +76,7 @@ export function showAlert(container, message, type, actionText, actionHref) {
 
   const alert = document.createElement('div');
   alert.className = 'c-alert c-alert--' + type;
-  // 错误和警告用 role=alert，其他用 role=status 第 8 章。
+  // 错误和警告用 role=alert，其他用 role=status 第 8 章
   alert.setAttribute('role', type === 'danger' || type === 'warning' ? 'alert' : 'status');
 
   let html =
@@ -135,14 +135,14 @@ export function showApiError(error, alertContainer) {
 //        <svg class=c-icon c-icon--sm ...><use href=kit/icons.svg#icon-error></use></svg>
 //        <span>The email address is invalid.</span>
 //      </p>
-//    所以文字要写进里面的 <span>，不能整个 <p> 覆盖掉，否则图标就没了。
+//    所以文字要写进里面的 <span>，不能整个 <p> 覆盖掉，否则图标就没了
 // ---------------------------------------------------------------------------
 
 export function setFieldError(input, errorElement, message) {
   input.setAttribute('aria-invalid', 'true');
 
   // 输入框本来可能已经用 aria-describedby 指向 hint（提示文字），
-  // 这里把错误元素追加进去，而不是把它覆盖掉。
+  // 这里把错误元素追加进去，而不是把它覆盖掉
   const describedBy = input.getAttribute('aria-describedby');
 
   if (describedBy === null) {
@@ -164,7 +164,7 @@ export function setFieldError(input, errorElement, message) {
 export function clearFieldError(input, errorElement) {
   input.removeAttribute('aria-invalid');
 
-  // 只把错误元素从 aria-describedby 里摘掉，保留原来的 hint 引用。
+  // 只把错误元素从 aria-describedby 里摘掉，保留原来的 hint 引用
   const describedBy = input.getAttribute('aria-describedby');
 
   if (describedBy !== null) {

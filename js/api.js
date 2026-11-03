@@ -1,4 +1,4 @@
-// js/api.js —— 所有网络请求的唯一入口。
+// js/api.js —— 所有网络请求的唯一入口
 //
 // 风格约定：代码（变量名、函数名、字符串）用简单英文，注释用中文
 // 页面不写 fetch()，只调用这里的 request()
@@ -36,7 +36,7 @@ export function clearTokens() {
   localStorage.removeItem(REFRESH_KEY);
 }
 
-// 有 refresh token 就算登录过。
+// 有 refresh token 就算登录过
 export function isLoggedIn() {
   return getRefreshToken() !== null;
 }
@@ -70,7 +70,7 @@ export class ApiError extends Error {
 // ---------------------------------------------------------------------------
 
 // 真正发刷新请求。故意用 fetch 而不用 request()：
-// 否则刷新自己收到 401 又会触发刷新，无限循环。
+// 否则刷新自己收到 401 又会触发刷新，无限循环
 async function sendRefreshRequest() {
   const refreshToken = getRefreshToken();
   if (refreshToken === null) {
@@ -97,7 +97,7 @@ async function sendRefreshRequest() {
   return true;
 }
 
-// refresh token 只能用一次，所以同一时刻只能有一个刷新请求。
+// refresh token 只能用一次，所以同一时刻只能有一个刷新请求
 // refreshPromise 记住正在进行的那次刷新：第一个 401 发起，后面的 401 直接等它
 let refreshPromise = null;
 
@@ -126,7 +126,7 @@ export function goToLoginPage() {
 //   method   'GET' | 'POST' | 'PUT' | 'DELETE'，默认 'GET'
 //   body     要发送的对象；GET 和 DELETE 不用传
 //   auth     默认带 token；登录、注册、/config 传 false
-//   retried  内部用：标记这是刷新之后的重放，防止 401 死循环。
+//   retried  内部用：标记这是刷新之后的重放，防止 401 死循环
 // ---------------------------------------------------------------------------
 
 export async function request(path, options) {
@@ -169,7 +169,7 @@ export async function request(path, options) {
     return request(path, retryOptions);
   }
 
-  // 5xx：服务器自己的问题。
+  // 5xx：服务器自己的问题
   if (response.status >= 500) {
     throw new ApiError(response.status, { code: 'SERVER_UNAVAILABLE', detail: SERVER_DOWN_TEXT });
   }

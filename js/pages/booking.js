@@ -232,7 +232,7 @@ function createTicketsCard() {
     tbody.appendChild(tr);
   }
 
-  // 表尾：小计 / 折扣 / 合计。
+  // 表尾：小计 / 折扣 / 合计
   const tfoot = card.querySelector('#ticket-foot');
   addFootRow(tfoot, 'Subtotal', formatMoney(booking.subtotal), '');
 

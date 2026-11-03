@@ -1,4 +1,4 @@
-// js/format.js —— 显示格式化。
+// js/format.js —— 显示格式化
 //
 // 用法：
 //   页面启动时：const config = await getConfig(); setTimeZone(config.timeZone);
@@ -8,7 +8,7 @@
 //   1. 所有日期时间都按【影院时区】显示，与电脑时区无关 → Intl 必须传 timeZone
 //   2. 不让 Intl 直接输出整串（不同地区格式会变），而是用 formatToParts() 取零件自己拼
 
-// 影院时区。页面启动时用 config.timeZone 覆盖。
+// 影院时区。页面启动时用 config.timeZone 覆盖
 // 默认给 UTC（中性值）：万一忘了设置，时间会明显不对，一眼能看出来
 let timeZone = 'UTC';
 
