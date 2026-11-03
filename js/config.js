@@ -1,4 +1,4 @@
-// js/config.js —— 服务端参数
+// js/config.js —— 服务端参数。
 //
 // 接口：GET /api/config（不需要登录）
 // 目的：整站只请求一次，之后都从内存里拿
@@ -6,7 +6,7 @@
 
 import { request } from './api.js';
 
-// 存配置的地方。null 表示还没拿过
+// 存配置的地方。null 表示还没拿过。
 let cachedConfig = null;
 
 export async function getConfig() {

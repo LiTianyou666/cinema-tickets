@@ -1,4 +1,4 @@
-// js/pages/registration.js —— 注册页 第 7 章
+// js/pages/registration.js —— 注册页 第 7 章。
 //
 // 参考标记：参考资料/snippets/S02a.html（默认）、S02b.html（校验错误）、S02c.html（邮箱已注册）
 //
@@ -17,7 +17,7 @@ import {
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PASSWORD_PATTERN = /^(?=.*[A-Za-z])(?=.*\d).{6,64}$/;
 
-// 已登录用户不该停在注册页 5.2.3
+// 已登录用户不该停在注册页（规格书 5.2.3）
 if (redirectIfLoggedIn() === false) {
   start();
 }
@@ -34,7 +34,7 @@ function start() {
   const alertBox = document.querySelector('#form-alert');
 
   // 每个字段：输入框 + 它下面的错误元素
-  // 这里的 key（fullName / email / ...）必须和服务端 errors 里的字段名一致
+  // 这里的 key（fullName / email / ...）必须和服务端 errors 里的字段名一致。
   const fieldMap = {
     fullName: { input: nameInput, error: document.querySelector('#reg-name-error') },
     email: { input: emailInput, error: document.querySelector('#reg-email-error') },
@@ -54,7 +54,7 @@ function start() {
 
   submitButton.disabled = false;
 
-  // 浏览器后退回来时模块不会重新执行，这里补一次
+  // 浏览器后退回来时模块不会重新执行，这里补一次。
   window.addEventListener('pageshow', function () {
     submitButton.disabled = false;
   });
@@ -64,13 +64,13 @@ function start() {
   // -------------------------------------------------------------------------
 
   async function sendRegistration() {
-    // 1. 清掉上一次的错误
+    // 1. 清掉上一次的错误。
     for (const fieldName in fieldMap) {
       clearFieldError(fieldMap[fieldName].input, fieldMap[fieldName].error);
     }
     clearAlerts(alertBox);
 
-    // 2. 收集表单值
+    // 2. 收集表单值。
     const values = {
       fullName: nameInput.value.trim(),
       email: emailInput.value.trim(),

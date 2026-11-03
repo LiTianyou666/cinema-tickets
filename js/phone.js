@@ -2,7 +2,7 @@
 //
 // 思路只有两步，别想复杂：
 //   1. 把输入里所有非数字字符删掉，只留数字（顺便处理粘贴时开头多出来的 7 或 8）
-//   2. 按 3-3-2-2 分组，把数字重新拼成带分隔符的样子
+//   2. 按 3-3-2-2 分组，把数字重新拼成带分隔符的样子。
 //
 // 输入框的 value 本身就是掩码格式，提交时直接发 input.value 就行
 
@@ -10,7 +10,7 @@
 const MASK_PATTERN = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/;
 
 
-// 从任意输入里取出最多 10 位号码
+// 从任意输入里取出最多 10 位号码。
 export function getPhoneDigits(value) {
   let digits = value.replace(/\D/g, ''); // \D 表示"非数字"，全部删掉
 
@@ -23,7 +23,7 @@ export function getPhoneDigits(value) {
 }
 
 
-// 把号码拼成掩码格式；没输入时返回空字符串
+// 把号码拼成掩码格式；没输入时返回空字符串。
 export function formatPhone(value) {
   const digits = getPhoneDigits(value);
 

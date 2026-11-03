@@ -12,7 +12,7 @@ import {
 } from '../ui.js';
 
 // 已登录的用户不该停在登录页 5.2.3
-// redirectIfLoggedIn() 返回 true 表示已经跳转了，那就不必再初始化页面
+// redirectIfLoggedIn() 返回 true 表示已经跳转了，那就不必再初始化页面。
 if (redirectIfLoggedIn() === false) {
   start();
 }
@@ -44,7 +44,7 @@ function start() {
   });
 
   async function sendLogin() {
-    // 1. 先清掉上一次留下的错误提示
+    // 1. 先清掉上一次留下的错误提示。
     clearFieldError(emailInput, emailError);
     clearFieldError(passwordInput, passwordError);
     clearAlerts(alertBox);
@@ -81,7 +81,7 @@ function start() {
         showApiError(error, alertBox);
       }
     } finally {
-      // 4. 不管成功还是失败，按钮都要恢复
+      // 4. 不管成功还是失败，按钮都要恢复。
       setLoading(submitButton, false);
     }
   }

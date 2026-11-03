@@ -1,4 +1,4 @@
-// js/pages/booking.js —— 订单详情页 第 15 章
+// js/pages/booking.js —— 订单详情页（规格书第 15 章）
 //
 // 参考标记：S10a（Active）、S10b（Cancelled）、S10c（Completed）、S10d（找不到）
 //
@@ -17,7 +17,7 @@ import { showAlert, showToast } from '../ui.js';
 let config = null;
 let booking = null;
 
-// 受限页面 5.2.1
+// 受限页面（规格书 5.2.1）
 if (requireAuth()) {
   start();
 }
@@ -232,7 +232,7 @@ function createTicketsCard() {
     tbody.appendChild(tr);
   }
 
-  // 表尾：小计 / 折扣 / 合计
+  // 表尾：小计 / 折扣 / 合计。
   const tfoot = card.querySelector('#ticket-foot');
   addFootRow(tfoot, 'Subtotal', formatMoney(booking.subtotal), '');
 

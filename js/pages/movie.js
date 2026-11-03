@@ -123,7 +123,7 @@ async function renderScheduleArea(movie, config, params) {
     return;
   }
 
-  // 选中日期：地址里的 date，没有就用第一个有场次的日期
+  // 选中日期：地址里的 date，没有就用第一个有场次的日期。
   const sessionDates = movie.sessionDates || [];
   let selectedDate = params.get('date');
 
@@ -274,7 +274,7 @@ function createSessionTile(session) {
 
 
 // ---------------------------------------------------------------------------
-// 10.3 影评：列表 + 追加
+// 10.3 影评：列表 + 追加。
 // ---------------------------------------------------------------------------
 
 async function loadFirstPageOfReviews(movie) {
@@ -431,7 +431,7 @@ function createReviewForm(movie, existingReview) {
     }
   });
 
-  // 输入文字 → 更新计数器
+  // 输入文字 → 更新计数器。
   textarea.addEventListener('input', function () {
     counter.textContent = textarea.value.length + ' / 1000';
   });
@@ -599,7 +599,7 @@ function openDeleteDialog(review, movie) {
 }
 
 
-// 影评变动后：重新拉影片（评分和数量会变）+ 重新渲染详情和列表
+// 影评变动后：重新拉影片（评分和数量会变）+ 重新渲染详情和列表。
 async function refreshMovie(movie) {
   const fresh = await request('/movies/' + encodeURIComponent(movie.id));
 

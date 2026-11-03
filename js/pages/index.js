@@ -4,7 +4,7 @@
 //
 // 核心思路：页面状态全部存在地址栏
 //   加载时：读地址栏参数 → 回填筛选控件 → 用同样的参数请求 /api/movies
-//   分页：真正的 <a href> 链接，带着完整查询串，所以刷新、分享都能还原同一页
+//   分页：真正的 <a href> 链接，带着完整查询串，所以刷新、分享都能还原同一页。
 
 import { request } from '../api.js';
 import { getConfig } from '../config.js';
@@ -34,14 +34,14 @@ async function main() {
   const nowShowingSwitch = document.querySelector('#filter-now-showing');
   const alertBox = document.querySelector('#page-alert');
 
-  // 地址栏参数就是页面状态
+  // 地址栏参数就是页面状态。
   const params = new URLSearchParams(location.search);
 
   fillDateOptions(config.scheduleDaysAhead);
   fillControls();
   updateMultiselectLabels();
 
-  // 勾选复选框时，同步更新Any / 2 个标签 / N selected这段文字
+  // 勾选复选框时，同步更新Any / 2 个标签 / N selected这段文字。
   document.addEventListener('change', function (event) {
     if (event.target.className === 'c-check__input') {
       updateMultiselectLabels();

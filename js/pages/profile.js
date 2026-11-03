@@ -1,4 +1,4 @@
-// js/pages/profile.js —— 个人资料页 第 8 章
+// js/pages/profile.js —— 个人资料页 第 8 章。
 //
 // 参考标记：参考资料/snippets/S03a.html（默认）、S03b.html（已保存 + 校验错误）
 //
@@ -13,7 +13,7 @@ import {
   clearAlerts, showApiError, showToast, setBusy
 } from '../ui.js';
 
-// 受限页面：没登录就跳登录页并带上 returnUrl 5.2.1
+// 受限页面：没登录就跳登录页并带上 returnUrl（规格书 5.2.1）
 if (requireAuth()) {
   start();
 }
@@ -58,7 +58,7 @@ async function start() {
   });
 
 
-  // 把服务端返回的资料填进页面
+  // 把服务端返回的资料填进页面。
   function fillProfile(data) {
     emailValue.textContent = data.email;
     genderValue.textContent = data.gender;
@@ -69,7 +69,7 @@ async function start() {
 
 
   async function saveProfile() {
-    // 1. 清掉上次的错误
+    // 1. 清掉上次的错误。
     for (const fieldName in fieldMap) {
       clearFieldError(fieldMap[fieldName].input, fieldMap[fieldName].error);
     }
@@ -82,7 +82,7 @@ async function start() {
       phoneNumber: phoneInput.value
     };
 
-    // 3. 浏览器先校验
+    // 3. 浏览器先校验。
     const errors = validate(values);
 
     if (Object.keys(errors).length > 0) {
@@ -90,7 +90,7 @@ async function start() {
       return;
     }
 
-    // 4. 提交
+    // 4. 提交。
     setLoading(submitButton, true);
 
     try {

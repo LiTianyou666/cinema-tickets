@@ -1,4 +1,4 @@
-// js/pages/bookings.js —— 订单列表页 第 14 章
+// js/pages/bookings.js —— 订单列表页（规格书第 14 章）
 //
 // 参考标记：S09a（各种状态）、S09b（刚下完单）、S09c（取消确认）、S09d（没有订单）
 //
@@ -129,19 +129,19 @@ function createBookingRow(booking) {
 
 // 操作区按状态和取消截止时间决定 14.2
 function fillActions(actionsBox, booking) {
-  // 已完成 → 去写影评
+  // 已完成 → 去写影评。
   if (booking.status === 'Completed') {
     actionsBox.innerHTML =
       '<a class="c-btn c-btn--link" href="movie.html?id=' + booking.movie.id + '">Review the movie</a>';
     return;
   }
 
-  // 已取消 → 什么都不放
+  // 已取消 → 什么都不放。
   if (booking.status === 'Cancelled') {
     return;
   }
 
-  // Active：看还来不来得及取消
+  // Active：看还来不来得及取消。
   const startsAt = new Date(booking.session.startsAt).getTime();
   const cancelDeadline = startsAt - config.cancellationCutoffMinutes * 60 * 1000;
 
@@ -210,7 +210,7 @@ function openCancelDialog(booking) {
 // 顶部两块提示
 // ---------------------------------------------------------------------------
 
-// ?created=N → N bookings are created. The cart is empty. 14.5
+// ?created=N → N bookings are created. The cart is empty.（规格书 14.5）
 function showCreatedAlert() {
   const params = new URLSearchParams(location.search);
   const created = params.get('created');
@@ -231,7 +231,7 @@ function showCreatedAlert() {
 }
 
 
-// 购物车不为空 → 提示卡 14.4
+// 购物车不为空 → 提示卡（规格书 14.4）
 function showCartHint() {
   const box = document.querySelector('#cart-hint');
 

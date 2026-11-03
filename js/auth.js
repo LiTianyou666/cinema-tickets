@@ -1,4 +1,4 @@
-// js/auth.js —— 登录态、访问控制、页头、登出 5.1 / 5.2
+// js/auth.js —— 登录态、访问控制、页头、登出 5.1 /（规格书 5.2）
 //
 // 页头在 HTML 里写的是【游客版】；登录后由 initHeader() 换成邮箱链接 + Log out
 // 受限页面开头调用 requireAuth()；登录页、注册页调用 redirectIfLoggedIn()
@@ -68,7 +68,7 @@ export async function initHeader() {
   await updateCartCounter();
 }
 
-// 购物车计数器：游客和空车都要隐藏 5.1.3
+// 购物车计数器：游客和空车都要隐藏（规格书 5.1.3）
 export async function updateCartCounter() {
   const counter = document.querySelector('.c-counter');
   if (counter === null) {
@@ -136,7 +136,7 @@ export async function logout() {
         body: { refreshToken: refreshToken }
       });
     } catch (error) {
-      // 服务器出错也要在本地登出，别把用户卡在已登录状态
+      // 服务器出错也要在本地登出，别把用户卡在已登录状态。
     }
   }
 

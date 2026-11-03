@@ -2,7 +2,7 @@
 //
 // 参考标记：S06a（已选座）、S06b（座位被抢）、S06c（达到上限）、S06d（已停售）、S06e（游客）
 //
-// 【笨办法】每次选座/取消成功后，把座位图和右侧汇总整块重新拉一遍
+// 【笨办法】每次选座/取消成功后，把座位图和右侧汇总整块重新拉一遍。
 // 好处：不用在本地猜加了还是减了，界面永远等于服务端的真实状态
 
 import { request, isLoggedIn } from '../api.js';
@@ -71,7 +71,7 @@ function fillTitle() {
 
 
 // ---------------------------------------------------------------------------
-// 拉座位图 + 购物车，然后整块重画
+// 拉座位图 + 购物车，然后整块重画。
 // ---------------------------------------------------------------------------
 
 async function refreshSeatMap() {
@@ -117,7 +117,7 @@ function drawSeatMap(seatMap) {
   const rowsBox = document.querySelector('#seatmap-rows');
   const closed = session.isBookingOpen === false;
 
-  // 列数用行内自定义属性
+  // 列数用行内自定义属性。
   seatmap.setAttribute('style', '--seat-cols: ' + seatMap.seatsPerRow);
   rowsBox.textContent = '';
 
@@ -188,7 +188,7 @@ function createSeatButton(seat, closed) {
     formatSeat(seat.row, seat.number) + ', ' + formatSeatType(seat.type) + ', ' + formatMoney(seat.price)
   );
 
-  // 本场次已停止售票 → 所有座位都不可点
+  // 本场次已停止售票 → 所有座位都不可点。
   if (closed === true) {
     button.disabled = true;
     return button;
@@ -220,7 +220,7 @@ async function handleSeatClick(seat) {
 
     await refreshSeatMap();
   } catch (error) {
-    // 座位被别人抢走 / 已经在车里：提示 + 重画
+    // 座位被别人抢走 / 已经在车里：提示 + 重画。
     if (error.code === 'SEAT_OCCUPIED' || error.code === 'ALREADY_IN_CART') {
       showToast(error.detail, 'danger');
       await refreshSeatMap();
@@ -258,7 +258,7 @@ function drawSummary(seatMap) {
   const list = document.querySelector('#summary-list');
   list.textContent = '';
 
-  // 只统计本场次里我的座位
+  // 只统计本场次里我的座位。
   const mine = [];
   let i;
   for (i = 0; i < seatMap.seats.length; i++) {
@@ -304,13 +304,13 @@ function createSummaryRow(seat) {
 
 
 // ---------------------------------------------------------------------------
-// 页面提示：已停售 / 游客 / 达到上限
+// 页面提示：已停售 / 游客 / 达到上限。
 // ---------------------------------------------------------------------------
 
 function showPageAlerts(seatMap) {
   const alertBox = document.querySelector('#seats-alert');
 
-  // 1. 本场次已停止售票
+  // 1. 本场次已停止售票。
   if (session.isBookingOpen === false) {
     showAlert(
       alertBox,
@@ -358,7 +358,7 @@ function showPageAlerts(seatMap) {
 
 
 // ---------------------------------------------------------------------------
-// 倒计时 11.3.2
+// 倒计时（规格书 11.3.2）
 // ---------------------------------------------------------------------------
 
 function updateTimer(cart) {
